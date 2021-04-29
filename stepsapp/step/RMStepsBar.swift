@@ -23,9 +23,11 @@ public protocol RMStepsBarDelegate: UIToolbarDelegate {
 public class RMStepsBar: UIToolbar {
     
     private let MinimalStepWidth: CGFloat = 40
+    private let SeperatorHeight: CGFloat = 1
     private let SeperatorWidth: CGFloat = 10
     private let AnimationDuration: TimeInterval = 0.3
     private let CancelButtonWidth: CGFloat = 42
+    private let CancelButtonHeight: CGFloat = 43
     private let RightSeperatorKey = "RM_RIGHT_SEPERATOR_KEY"
     private let LeftSeperatorKey = "RM_LEFT_SEPERATOR_KEY"
     private let StepWidthConstraintKey = "RM_STEP_WIDTH_CONSTRAINT_KEY"
@@ -101,39 +103,41 @@ public class RMStepsBar: UIToolbar {
         translatesAutoresizingMaskIntoConstraints = false
         clipsToBounds = true
         
-        topLine.frame = CGRect(x: 0, y: frame.height - 43, width: frame.width, height: 0.4)
+        topLine.frame = CGRect(x: 0, y: frame.height - CancelButtonHeight, width: frame.width, height: 0.4)
         addSubview(topLine)
         
-        bottomLine.frame = CGRect(x: 0, y: frame.height - 0.5, width: frame.width, height: 0.5)
+        bottomLine.frame = CGRect(x: 0, y: frame.height - SeperatorHeight, width: frame.width, height: SeperatorHeight)
         addSubview(bottomLine)
         
-        cancelButton.frame = CGRect(x: 0, y: frame.height - 43, width: CancelButtonWidth, height: 42)
+        cancelButton.frame = CGRect(x: 0, y: frame.height - CancelButtonHeight, width: CancelButtonWidth, height: 42)
         addSubview(cancelButton)
         
-        cancelSeperator.frame = CGRect(x: CancelButtonWidth, y: frame.height - 44, width: 0.5, height: frame.height)
+        cancelSeperator.frame = CGRect(x: CancelButtonWidth, y: frame.height - 44, width: SeperatorHeight, height: frame.height)
         addSubview(cancelSeperator)
-        
-        let bindingsDict = [
-            "topLine" : topLine,
-            "bottomLine" : bottomLine,
-            "cancelButton" : cancelButton,
-            "cancelSeperator" : cancelSeperator
-        ]
-        let metricsDict = [
-            "cancelWidth" : CancelButtonWidth
-        ]
-        
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[topLine]-(0)-|", options: [], metrics: metricsDict, views: bindingsDict))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[bottomLine]-(0)-|", options: [], metrics: metricsDict, views: bindingsDict))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[cancelButton(cancelWidth)]-(0)-[cancelSeperator(0.5)]", options: [], metrics: metricsDict, views: bindingsDict))
-        
-        cancelButtonXConstraint = NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[cancelButton]", options: [], metrics: metricsDict, views: bindingsDict).last!
-        addConstraint(cancelButtonXConstraint)
-        
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[topLine(0.5)]-(43)-[bottomLine(0.5)]-(0)-|", options: [], metrics: metricsDict, views: bindingsDict))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[cancelButton(43)]-(0.5)-|", options: [], metrics: metricsDict, views: bindingsDict))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[cancelSeperator(43)]-(0.5)-|", options: [], metrics: metricsDict, views: bindingsDict))
-        
+
+        cancelButtonXConstraint = cancelButton.leadingAnchor.constraint(equalTo: leadingAnchor)
+        NSLayoutConstraint.activate([
+            topLine.topAnchor.constraint(equalTo: topAnchor, constant: SeperatorHeight),
+            topLine.heightAnchor.constraint(equalToConstant: SeperatorHeight),
+            topLine.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topLine.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            bottomLine.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomLine.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomLine.heightAnchor.constraint(equalToConstant: SeperatorHeight),
+            bottomLine.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -SeperatorHeight),
+
+            cancelButtonXConstraint,
+            cancelButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -SeperatorHeight),
+            cancelButton.widthAnchor.constraint(equalToConstant: CancelButtonWidth),
+            cancelButton.heightAnchor.constraint(equalToConstant: CancelButtonHeight),
+
+            cancelSeperator.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor),
+            cancelSeperator.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -SeperatorHeight),
+            cancelSeperator.widthAnchor.constraint(equalToConstant: SeperatorHeight),
+            cancelSeperator.heightAnchor.constraint(equalToConstant: CancelButtonHeight),
+        ])
+
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(recognizedTap(recognizer:))))
     }
     
@@ -202,6 +206,9 @@ public class RMStepsBar: UIToolbar {
         stepDictionaries.removeAll()
         
         let numberOfSteps = dataSource.numberOfStepsInStepsBar(stepbar: self)
+        if numberOfSteps < 1 {
+            return
+        }
         var leftSeperator: RMStepSeperatorView?
         var rightSeperator: RMStepSeperatorView?
         for i in 0...numberOfSteps - 1 {
@@ -223,48 +230,47 @@ public class RMStepsBar: UIToolbar {
             let rightEnd: UIView = rightSeperator ?? self
             let stepView = step.stepView
             
-            let bindingsDict = [
-                "leftEnd" : leftEnd,
-                "rightEnd" : rightEnd,
-                "stepView" : stepView
-            ]
-            let metricsDict = [
-                "minimalStepWidth" : MinimalStepWidth,
-                "seperatorWidth" : SeperatorWidth
-            ]
-            
-            addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[stepView(44)]-(0)-|", options: [], metrics: metricsDict, views: bindingsDict))
+            NSLayoutConstraint.activate([
+                stepView.heightAnchor.constraint(equalToConstant: 44),
+                stepView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            ])
             if rightSeperator == nil {
-                addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[leftEnd]-(0)-[stepView]-(0)-|", options: [], metrics: metricsDict, views: bindingsDict))
+                NSLayoutConstraint.activate([
+                    stepView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                    stepView.leadingAnchor.constraint(equalTo: leftEnd.trailingAnchor),
+                ])
             } else {
-                addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[leftEnd]-(0)-[stepView]-(0)-[rightEnd]", options: [], metrics: metricsDict, views: bindingsDict))
-                addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[rightEnd(seperatorWidth)]", options: [], metrics: metricsDict, views: bindingsDict))
-                addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[rightEnd(44)]-(0)-|", options: [], metrics: metricsDict, views: bindingsDict))
+                NSLayoutConstraint.activate([
+                    stepView.trailingAnchor.constraint(equalTo: rightEnd.leadingAnchor),
+                    stepView.leadingAnchor.constraint(equalTo: leftEnd.trailingAnchor),
+                    rightEnd.widthAnchor.constraint(equalToConstant: SeperatorWidth),
+                    rightEnd.heightAnchor.constraint(equalToConstant: 44),
+                    rightEnd.bottomAnchor.constraint(equalTo: bottomAnchor),
+                ])
             }
             
-            var widthConstraints: [NSLayoutConstraint]? = nil
-            widthConstraints = NSLayoutConstraint.constraints(withVisualFormat: "[stepView(minimalStepWidth)]", options: [], metrics: metricsDict, views: bindingsDict)
+            let widthConstraint = stepView.widthAnchor.constraint(equalToConstant: MinimalStepWidth)
             if i != indexOfSelectedStep {
-                if let last = widthConstraints?.last {
-                    addConstraint(last)
-                }
+                NSLayoutConstraint.activate([
+                    widthConstraint
+                ])
             }
             
             if leftSeperator != nil && rightSeperator != nil {
                stepDictionaries.append([LeftSeperatorKey:leftSeperator,
                                         StepKey:step,
                                         RightSeperatorKey:rightSeperator,
-                                        StepWidthConstraintKey:widthConstraints?.last])
+                                        StepWidthConstraintKey:widthConstraint])
             }
             if leftSeperator != nil && rightSeperator == nil {
                stepDictionaries.append([LeftSeperatorKey:leftSeperator,
                                         StepKey:step,
-                                        StepWidthConstraintKey:widthConstraints?.last])
+                                        StepWidthConstraintKey:widthConstraint])
             }
             if leftSeperator == nil && rightSeperator != nil {
                stepDictionaries.append([StepKey:step,
                                         RightSeperatorKey:rightSeperator,
-                                        StepWidthConstraintKey:widthConstraints?.last])
+                                        StepWidthConstraintKey:widthConstraint])
             }
             
             updateSteps(animated: false)

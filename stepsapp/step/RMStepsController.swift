@@ -8,8 +8,7 @@
 import UIKit
 
 public class RMStepsController: UIViewController, RMStepsBarDelegate, RMStepsBarDataSource {
-    
-    
+
     private let AnimationDuration: TimeInterval = 0.3
 
     private var currentStepViewController: UIViewController?
@@ -32,24 +31,16 @@ public class RMStepsController: UIViewController, RMStepsBarDelegate, RMStepsBar
         view.addSubview(stepViewControllerContainer)
         view.addSubview(stepsBar)
 
-        let bindingsDict = [
-            "stepsBar" : stepsBar,
-            "container" : stepViewControllerContainer
-        ]
-        
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[stepsBar]", options: [], metrics: nil, views: bindingsDict))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[container]-(0)-|", options: [], metrics: nil, views: bindingsDict))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-0-[stepsBar]-0-|", options: [], metrics: nil, views: bindingsDict))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-0-[container]-0-|", options: [], metrics: nil, views: bindingsDict))
-        
-        let constraint = NSLayoutConstraint(item: stepsBar,
-                                            attribute: .bottom,
-                                            relatedBy: .equal,
-                                            toItem: view.safeAreaLayoutGuide.topAnchor,
-                                            attribute: .firstBaseline,
-                                            multiplier: 1,
-                                            constant: 44)
-        view.addConstraint(constraint)
+        NSLayoutConstraint.activate([
+            stepViewControllerContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            stepViewControllerContainer.topAnchor.constraint(equalTo: view.topAnchor),
+            stepViewControllerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stepViewControllerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+
+            stepsBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stepsBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stepsBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
         
         loadStepViewControllers()
         if let firstViewController = children.first {

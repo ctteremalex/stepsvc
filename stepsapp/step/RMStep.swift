@@ -37,7 +37,6 @@ public class RMStep {
     
     public lazy var titleLabel: UILabel = {
         let newLabel = createLabel()
-        newLabel.text = title;
         newLabel.textAlignment = .left;
         return newLabel
     }()
