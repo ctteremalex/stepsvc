@@ -7,40 +7,52 @@
 
 import UIKit
 
-class ViewController: RMStepsController {
+fileprivate let MinimalStepWidth: CGFloat = 80
+
+class ViewController: UIViewController, CCStepsBarDataSource {
+    
+    private var stepsList = [
+        CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: UIViewController()),
+        CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: UIViewController()),
+        CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: UIViewController()),
+        CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: UIViewController()),
+    ]
+    private var stepsViewController: CCStepsViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+        stepsViewController = CCStepsViewController(stepsBarDataSource: self)
+        guard let stepsViewController = stepsViewController else {
+            return
+        }
+        stepsViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        addChild(stepsViewController)
+        view.addSubview(stepsViewController.view)
+        NSLayoutConstraint.activate([
+            stepsViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stepsViewController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            stepsViewController.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stepsViewController.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+        ])
     }
 
-    func createViewController(color: UIColor) -> RMStepsController {
-        let newViewController = RMStepsController()
-        newViewController.view.backgroundColor = color
-        return newViewController
+    func numberOfSteps() -> Int {
+        return stepsList.count
     }
-
-    override func stepViewControllers() -> [RMStepsController] {
-        let firstStep = createViewController(color: .red)
-        firstStep.step.title = "First"
-
-        let secondStep = createViewController(color: .green)
-        secondStep.step.title = "Second"
-
-        let thirdStep = createViewController(color: .yellow)
-        thirdStep.step.title = "Third"
-
-        let fourthStep = createViewController(color: .blue)
-        fourthStep.step.title = "Fourth"
-
-        return [firstStep, secondStep, thirdStep, fourthStep]
+    
+    func stepAtIndex(index: Int) -> CCStep {
+        return stepsList[index]
     }
+    
+    func stepBarIndicator(index: Int) -> UIView {
+        let newLabel = UILabel(frame: .zero)
+        
+        newLabel.textAlignment = .center
+        newLabel.backgroundColor = .green
+        newLabel.text = "Step-\(index)"
 
-    override func finishedAllSteps() {
-        dismiss(animated: true)
+        return newLabel
     }
-
-    override func canceled() {
-        dismiss(animated: true)
-    }}
-
+    
+}
