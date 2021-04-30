@@ -7,9 +7,12 @@
 
 import UIKit
 
+public typealias StepSelectionHandler = () -> Void
+
 public struct CCStep {
  
     public var minimalStepLabelWidth: CGFloat = 60
     public var viewController = UIViewController()
+    public var selectionBlock: StepSelectionHandler?
     
 }

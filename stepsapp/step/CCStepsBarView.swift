@@ -20,19 +20,15 @@ public protocol CCStepsBarDelegate: AnyObject {
     func stepSelected(step: CCStep)
 }
 
-fileprivate let shift: CGFloat = 10
+fileprivate let shift: CGFloat = 5
 
 public class CCStepsBarView: UIView {
     
     private var currentStepIndex: Int = 0
     
-    public var stepEdgeInsets = UIEdgeInsets(top: shift, left: shift, bottom: shift, right: shift)
+    public var stepEdgeInsets = UIEdgeInsets(top: shift, left: shift, bottom: -shift, right: -shift)
     public weak var stepsDataSource: CCStepsBarDataSource?
     public weak var stepsDelegate: CCStepsBarDelegate?
-    
-    public func jumpToStepAtIndex(index: Int) {
-        activateStepAtIndex(index: index)
-    }
     
     public func reloadData() {
         if !checkStepsNumber() {
@@ -53,8 +49,18 @@ public class CCStepsBarView: UIView {
         for i in 0...numberOfSteps - 1 {
             let step = stepsDataSource.stepAtIndex(index: i)
             
-            let stepContainerView = UIView(frame: .zero)
-            stepContainerView.translatesAutoresizingMaskIntoConstraints = false
+            let stepContainerView = CCStepsBarContainerView(frame: .zero)
+            stepContainerView.tapBlock = { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                
+                self.activateStepAtIndex(index: i)
+                guard let stepsDelegate = self.stepsDelegate else {
+                    return
+                }
+                stepsDelegate.stepSelected(step: step)
+            }
             addSubview(stepContainerView)
 
             let indicatorView = stepsDataSource.stepBarIndicator(index: i)
@@ -83,6 +89,10 @@ public class CCStepsBarView: UIView {
                 ])
             }
         }
+    }
+    
+    public func jumpToStepAtIndex(index: Int) {
+        activateStepAtIndex(index: index)
     }
     
     public func jumpToNextStep() {
@@ -115,26 +125,15 @@ public class CCStepsBarView: UIView {
         if !checkStepsNumber() {
             return
         }
-        
-        guard let stepsDataSource = stepsDataSource else {
-            return
-        }
-        let step = stepsDataSource.stepAtIndex(index: index)
-        
-        //  setup UI in here
-        
+
         currentStepIndex = index
-        
-        guard let stepsDelegate = stepsDelegate else {
-            return
-        }
-        stepsDelegate.stepSelected(step: step)
     }
     
     private func checkStepsNumber() -> Bool {
         guard let stepsDataSource = stepsDataSource else {
             return false
         }
+        
         let numberOfSteps = stepsDataSource.numberOfSteps()
         if numberOfSteps < 1 {
             return false

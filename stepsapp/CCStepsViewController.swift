@@ -13,7 +13,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     private let StepsbarHeight: CGFloat = 44
     
     private let stepsView = UIView(frame: .zero)
-    public let stepsbar = CCStepsBarView()
+    private let stepsbar = CCStepsBarView()
 
     convenience init(stepsBarDataSource: CCStepsBarDataSource?) {
         self.init()
