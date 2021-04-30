@@ -26,6 +26,8 @@ public protocol CCStepsBarDataSource: AnyObject {
 /// Provides events which are happeneed inside stepsbar
 public protocol CCStepsBarDelegate: AnyObject {
     
+    var allStepsCompleted: Bool { get }
+    
     /// Step with index was selected
     /// - Parameter index: index of step
     func stepSelected(index: Int)

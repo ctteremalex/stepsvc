@@ -14,6 +14,20 @@ public protocol CCStepsDataSource: CCStepsBarDataSource {
 }
 
 public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
+    public var allStepsCompleted: Bool {
+        guard let source = dataSource else {
+            return false
+        }
+        
+        var completed = false
+        
+        for index in 0..<source.numberOfSteps {
+            completed = completed && isCompleted(step: index)
+        }
+        
+        return completed
+    }
+    
     public func showIncompleteError(step: Int) {
         dataSource?.stepAtIndex(index: step).viewController.showIncompleteError()
     }
