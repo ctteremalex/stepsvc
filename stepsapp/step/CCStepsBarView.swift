@@ -36,11 +36,13 @@ fileprivate let shift: CGFloat = 5
 
 /// Stepsbar showing all the steps which user can choose
 public class CCStepsBarView: UIView {
+    private enum Constants {
+        static let shift: CGFloat = 5
+    }
     
     private var currentStepIndex: Int = 0
     
-    /// offsets for stepBarIndicator view from the edges
-    public var stepEdgeInsets = UIEdgeInsets(top: shift, left: shift, bottom: -shift, right: -shift)
+    public var stepEdgeInsets = UIEdgeInsets(withInset: Constants.shift)
     public weak var stepsDataSource: CCStepsBarDataSource?
     public weak var stepsDelegate: CCStepsBarDelegate?
     
@@ -162,4 +164,11 @@ public class CCStepsBarView: UIView {
         return true
     }
     
+}
+
+private extension UIEdgeInsets {
+    init(withInset: CGFloat) {
+        let inset = withInset
+        self = .init(top: inset, left: inset, bottom: -inset, right: -inset)
+    }
 }
