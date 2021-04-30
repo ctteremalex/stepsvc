@@ -14,6 +14,20 @@ public protocol CCStepsDataSource: CCStepsBarDataSource {
 }
 
 public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
+    public func showIncompleteError(step: Int) {
+        dataSource?.stepAtIndex(index: step).viewController.showIncompleteError()
+    }
+    
+    public func isCompleted(step: Int) -> Bool {
+        guard let stepObject = dataSource?.stepAtIndex(index: step) else {
+            return false
+        }
+        
+        // Describe here a validation logic
+        let isCompleted = stepObject.viewController.view.tag < 10
+        
+        return isCompleted
+    }
     
     private let StepsbarHeight: CGFloat = 44
     
