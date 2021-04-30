@@ -32,13 +32,6 @@
 		E39793942639AE5800009DFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E39793972639AE5800009DFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E39793992639AE5800009DFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E39793B02639AEE300009DFC /* RMStepSeperatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMStepSeperatorView.swift; sourceTree = "<group>"; };
-		E39793B12639AEE300009DFC /* RMStepsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMStepsController.swift; sourceTree = "<group>"; };
-		E39793B22639AEE300009DFC /* RMStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMStep.swift; sourceTree = "<group>"; };
-		E39793B32639AEE300009DFC /* RMStepsBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMStepsBar.swift; sourceTree = "<group>"; };
-		E39793B42639AEE300009DFC /* UIViewController+RMSteps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+RMSteps.swift"; sourceTree = "<group>"; };
-		E39793B52639AEE300009DFC /* UICollectionViewController+RMSteps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewController+RMSteps.swift"; sourceTree = "<group>"; };
-		E39793B62639AEE400009DFC /* UITableViewController+RMSteps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewController+RMSteps.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,13 +79,6 @@
 		E39793A02639AEB300009DFC /* step */ = {
 			isa = PBXGroup;
 			children = (
-				E39793B22639AEE300009DFC /* RMStep.swift */,
-				E39793B32639AEE300009DFC /* RMStepsBar.swift */,
-				E39793B12639AEE300009DFC /* RMStepsController.swift */,
-				E39793B02639AEE300009DFC /* RMStepSeperatorView.swift */,
-				E39793B52639AEE300009DFC /* UICollectionViewController+RMSteps.swift */,
-				E39793B62639AEE400009DFC /* UITableViewController+RMSteps.swift */,
-				E39793B42639AEE300009DFC /* UIViewController+RMSteps.swift */,
 				E36A5B39263AC356007A2B9B /* CCStepsViewController.swift */,
 				E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */,
 				E36A5B47263BD59C007A2B9B /* CCStepsBarContainerView.swift */,
