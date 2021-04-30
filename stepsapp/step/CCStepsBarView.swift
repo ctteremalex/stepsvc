@@ -10,14 +10,15 @@ import UIKit
 public protocol CCStepsBarDataSource: AnyObject {
     
     func numberOfSteps() -> Int
-    func stepAtIndex(index: Int) -> CCStep
+    func minimalStepWidthAtIndex(index: Int) -> CGFloat
     func stepBarIndicator(index: Int) -> UIView
     
 }
 
 public protocol CCStepsBarDelegate: AnyObject {
     
-    func stepSelected(step: CCStep)
+    func stepSelected(index: Int)
+    
 }
 
 fileprivate let shift: CGFloat = 5
@@ -46,9 +47,7 @@ public class CCStepsBarView: UIView {
         let numberOfSteps = stepsDataSource.numberOfSteps()
         var lastContainer: UIView?
         var leadingConstraint = leadingAnchor
-        for i in 0...numberOfSteps - 1 {
-            let step = stepsDataSource.stepAtIndex(index: i)
-            
+        for i in 0...numberOfSteps - 1 {            
             let stepContainerView = CCStepsBarContainerView(frame: .zero)
             stepContainerView.tapBlock = { [weak self] in
                 guard let self = self else {
@@ -56,10 +55,6 @@ public class CCStepsBarView: UIView {
                 }
                 
                 self.activateStepAtIndex(index: i)
-                guard let stepsDelegate = self.stepsDelegate else {
-                    return
-                }
-                stepsDelegate.stepSelected(step: step)
             }
             addSubview(stepContainerView)
 
@@ -67,6 +62,7 @@ public class CCStepsBarView: UIView {
             indicatorView.translatesAutoresizingMaskIntoConstraints = false
             stepContainerView.addSubview(indicatorView)
 
+            let minimalStepWidth = stepsDataSource.minimalStepWidthAtIndex(index: i)
             if let lastContainer = lastContainer {
                 leadingConstraint = lastContainer.trailingAnchor
             }
@@ -77,7 +73,7 @@ public class CCStepsBarView: UIView {
                 indicatorView.trailingAnchor.constraint(equalTo: stepContainerView.trailingAnchor, constant: stepEdgeInsets.right),
 
                 stepContainerView.leadingAnchor.constraint(equalTo: leadingConstraint),
-                stepContainerView.widthAnchor.constraint(greaterThanOrEqualToConstant: step.minimalStepLabelWidth),
+                stepContainerView.widthAnchor.constraint(greaterThanOrEqualToConstant: minimalStepWidth),
                 stepContainerView.topAnchor.constraint(equalTo: topAnchor),
                 stepContainerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             ])
@@ -127,6 +123,12 @@ public class CCStepsBarView: UIView {
         }
 
         currentStepIndex = index
+        
+        guard let stepsDelegate = stepsDelegate else {
+            return
+        }
+        
+        stepsDelegate.stepSelected(index: currentStepIndex)
     }
     
     private func checkStepsNumber() -> Bool {

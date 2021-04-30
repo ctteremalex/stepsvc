@@ -7,6 +7,11 @@
 
 import UIKit
 
+public protocol CCStepsDataSource: CCStepsBarDataSource {
+
+    func stepAtIndex(index: Int) -> CCStep
+    
+}
 
 public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     
@@ -14,12 +19,14 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     
     private let stepsView = UIView(frame: .zero)
     private let stepsbar = CCStepsBarView()
+    public weak var dataSource: CCStepsDataSource?
 
-    convenience init(stepsBarDataSource: CCStepsBarDataSource?) {
+    convenience init(stepsDataSource: CCStepsDataSource?) {
         self.init()
 
         stepsbar.stepsDelegate = self
-        stepsbar.stepsDataSource = stepsBarDataSource
+        stepsbar.stepsDataSource = stepsDataSource
+        dataSource = stepsDataSource
     }
     
     public override func viewDidLoad() {
@@ -50,9 +57,18 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         stepsbar.jumpToStepAtIndex(index: 0)
     }
 
-    public func stepSelected(step: CCStep) {
+    public func stepSelected(index: Int) {
+        guard let dataSource = dataSource else {
+            return
+        }
         hideCurrentStepViewController()
+        let step = dataSource.stepAtIndex(index: index)
         showStepViewController(step: step)
+        
+        guard let stepSelectionBlock = step.selectionBlock else {
+            return
+        }
+        stepSelectionBlock()
     }
     
     private func hideCurrentStepViewController() {
