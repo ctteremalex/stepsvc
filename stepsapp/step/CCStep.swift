@@ -9,11 +9,18 @@ import UIKit
 
 public typealias StepSelectionHandler = () -> Void
 
+public protocol StepViewControllerDelegate: UIViewController {
+    var stepIsReady: Bool { get }
+    
+    func showIncompleteError()
+}
+
+
 /// Model of step for CCStepsViewController
 public struct CCStep {
  
     public var minimalStepLabelWidth: CGFloat = 60
-    public var viewController = UIViewController()
+    public var viewController: StepViewControllerDelegate
     public var selectionBlock: StepSelectionHandler?
     
 }
