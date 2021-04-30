@@ -9,6 +9,7 @@ import UIKit
 
 public typealias StepsContainerTapHandler = () -> Void
 
+/// This class needed to hold users view of stepbar of eveery step
 class CCStepsBarContainerView: UIView {
 
     public var tapBlock: StepsContainerTapHandler?

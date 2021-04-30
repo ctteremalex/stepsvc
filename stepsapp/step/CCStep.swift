@@ -9,6 +9,7 @@ import UIKit
 
 public typealias StepSelectionHandler = () -> Void
 
+/// Model of step for CCStepsViewController
 public struct CCStep {
  
     public var minimalStepLabelWidth: CGFloat = 60
