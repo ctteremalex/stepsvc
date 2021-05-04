@@ -9,46 +9,6 @@ import UIKit
 
 fileprivate let MinimalStepWidth: CGFloat = 80
 
-class StepViewController: UIViewController, StepViewControllerDelegate {
-    var stepIsReady: Bool = false
-    
-    /// custom logic-UI to handle form in view ccontroller
-    lazy var checkSwitch: UISwitch = {
-        let switcher = UISwitch(frame: .init(origin: .zero, size: .init(width: 100, height: 100)))
-        
-        switcher.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(switcher)
-        NSLayoutConstraint.activate([
-            switcher.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            switcher.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        ])
-        
-        switcher.addTarget(self, action: #selector(didChanged(on:)), for: .valueChanged)
-        return switcher
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        checkSwitch.isOn = false
-    }
-    
-    @IBAction private func didChanged(on: Bool) {
-        stepIsReady = checkSwitch.isOn
-    }
-    
-    func showIncompleteError() {
-        // TODO: do your error UI
-        let currentColor = view.backgroundColor
-        view.backgroundColor = .white
-
-        UIView.animate(withDuration: 0.5) {
-            self.view.backgroundColor = currentColor
-            self.view.layoutIfNeeded()
-        }
-
-    }
-}
-
 class ViewController: UIViewController, CCStepsDataSource {
     
     private var stepsList = [CCStep]()
@@ -61,12 +21,16 @@ class ViewController: UIViewController, CCStepsDataSource {
         vc1.view.backgroundColor = .green
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc1, selectionBlock: {
             print("selected step is 01 with GREEN")
+        }, isReady: {
+            vc1.stepIsReady
         }))
 
         let vc2 = StepViewController()
         vc2.view.backgroundColor = .red
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc2, selectionBlock: {
             print("selected step is 02 with RED")
+        }, isReady: {
+            vc2.stepIsReady
         }))
 
         let vc3 = StepViewController()
@@ -74,12 +38,16 @@ class ViewController: UIViewController, CCStepsDataSource {
         vc3.view.tag = 10 // TODO: just to test an incompletion
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc3, selectionBlock: {
             print("selected step is 03 with YELLOW")
+        }, isReady: {
+            vc3.stepIsReady
         }))
 
         let vc4 = StepViewController()
         vc4.view.backgroundColor = .blue
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc4, selectionBlock: {
             print("selected step is 04 with BLUE")
+        }, isReady: {
+            vc4.stepIsReady
         }))
 
         let controller = CCStepsViewController(stepsDataSource: self)

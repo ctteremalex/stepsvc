@@ -38,7 +38,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         }
         
         // Describe here a validation logic
-        let isCompleted = stepObject.viewController.stepIsReady        
+        let isCompleted = stepObject.isReady()
         
         return isCompleted
     }

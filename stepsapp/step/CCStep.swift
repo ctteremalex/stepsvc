@@ -18,9 +18,13 @@ public protocol StepViewControllerDelegate: UIViewController {
 
 /// Model of step for CCStepsViewController
 public struct CCStep {
- 
+
     public var minimalStepLabelWidth: CGFloat = 60
     public var viewController: StepViewControllerDelegate
     public var selectionBlock: StepSelectionHandler?
+//    /// to jump step by step
+//    public weak var nextController: StepViewControllerDelegate?
+//    public weak var previousController: StepViewControllerDelegate?
     
+    public var isReady: (() -> Bool)
 }
