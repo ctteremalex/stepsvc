@@ -34,7 +34,7 @@ public protocol CCStepsBarDelegate: AnyObject {
     
     func isCompleted(step: Int) -> Bool
     
-    func showIncompleteError(step: Int)
+    func showIncompletionError(step: Int)
 }
 
 fileprivate let shift: CGFloat = 5
@@ -142,7 +142,7 @@ public class CCStepsBarView: UIStackView {
         if currentStepIndex < index {
             guard stepsDelegate.isCompleted(step: currentStepIndex) else {
                 print("show Error: step \(currentStepIndex) is not completed")
-                stepsDelegate.showIncompleteError(step: currentStepIndex)
+                stepsDelegate.showIncompletionError(step: currentStepIndex)
                 return
             }
         }

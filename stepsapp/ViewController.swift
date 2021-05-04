@@ -35,7 +35,6 @@ class ViewController: UIViewController, CCStepsDataSource {
 
         let vc3 = StepViewController()
         vc3.view.backgroundColor = .yellow
-        vc3.view.tag = 10 // TODO: just to test an incompletion
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc3, selectionBlock: {
             print("selected step is 03 with YELLOW")
         }, isReady: {

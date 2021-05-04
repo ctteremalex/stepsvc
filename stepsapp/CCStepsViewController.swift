@@ -28,7 +28,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         return completed
     }
     
-    public func showIncompleteError(step: Int) {
+    public func showIncompletionError(step: Int) {
         dataSource?.stepAtIndex(index: step).viewController.showIncompleteError()
     }
     
