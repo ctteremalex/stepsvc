@@ -10,8 +10,30 @@ import UIKit
 fileprivate let MinimalStepWidth: CGFloat = 80
 
 class StepViewController: UIViewController, StepViewControllerDelegate {
-    var stepIsReady: Bool {
-        true
+    var stepIsReady: Bool = false
+    
+    /// custom logic-UI to handle form in view ccontroller
+    lazy var checkSwitch: UISwitch = {
+        let switcher = UISwitch(frame: .init(origin: .zero, size: .init(width: 100, height: 100)))
+        
+        switcher.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(switcher)
+        NSLayoutConstraint.activate([
+            switcher.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            switcher.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        ])
+        
+        switcher.addTarget(self, action: #selector(didChanged(on:)), for: .valueChanged)
+        return switcher
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        checkSwitch.isOn = false
+    }
+    
+    @IBAction private func didChanged(on: Bool) {
+        stepIsReady = checkSwitch.isOn
     }
     
     func showIncompleteError() {
@@ -30,7 +52,7 @@ class StepViewController: UIViewController, StepViewControllerDelegate {
 class ViewController: UIViewController, CCStepsDataSource {
     
     private var stepsList = [CCStep]()
-    private var stepsViewController: CCStepsViewController?
+//    private var stepsViewController: StepViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,18 +82,16 @@ class ViewController: UIViewController, CCStepsDataSource {
             print("selected step is 04 with BLUE")
         }))
 
-        stepsViewController = CCStepsViewController(stepsDataSource: self)
-        guard let stepsViewController = stepsViewController else {
-            return
-        }
-        stepsViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        addChild(stepsViewController)
-        view.addSubview(stepsViewController.view)
+        let controller = CCStepsViewController(stepsDataSource: self)
+        
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        addChild(controller)
+        view.addSubview(controller.view)
         NSLayoutConstraint.activate([
-            stepsViewController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            stepsViewController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            stepsViewController.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            stepsViewController.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            controller.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            controller.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            controller.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            controller.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
 
