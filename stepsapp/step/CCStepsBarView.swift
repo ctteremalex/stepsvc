@@ -8,7 +8,7 @@
 import UIKit
 
 /// Source of data for CCStepsBarView
-public protocol CCStepsBarDataSource: AnyObject {
+public protocol CCStepsBarDataSource: UICollectionViewDataSource {
     
     /// Number of steps to display in bar
     var numberOfSteps: Int { get }
@@ -17,10 +17,16 @@ public protocol CCStepsBarDataSource: AnyObject {
     /// - Parameter index: index of step for which we are looking for width
     func minimalStepWidthAtIndex(index: Int) -> CGFloat
     
-    /// UIView which will be placed on bar as step indicator
-    /// - Parameter index: index of step
-    func stepBarIndicator(index: Int) -> UIView
+//    /// UIView which will be placed on bar as step indicator
+//    /// - Parameter index: index of step
+//    func stepBarIndicator(index: Int) -> UIView
+//    
+//    /// UIView which will be placed on bar as active step indicator
+//    /// - Parameter index: index of step
+//    func stepBarActiveIndicator(index: Int) -> UIView
     
+    ///
+    func canJumpTo(step: Int) -> Bool
 }
 
 /// Provides events which are happeneed inside stepsbar
@@ -31,18 +37,46 @@ public protocol CCStepsBarDelegate: AnyObject {
     /// Step with index was selected
     /// - Parameter index: index of step
     func stepSelected(index: Int)
-    
-    func isCompleted(step: Int) -> Bool
-    
+
+    /// Show an error for index
+    /// - Parameter step: index of step
     func showIncompletionError(step: Int)
 }
 
 fileprivate let shift: CGFloat = 5
 
 /// Stepsbar showing all the steps which user can choose
-public class CCStepsBarView: UIStackView {
+public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    private var commonW: CGFloat = Constants.commonStepWidth
+    private var selectedW: CGFloat = Constants.selectedStepWidth
+    
     private enum Constants {
+        static let stepHeight: CGFloat = 44
+        static let selectedStepWidth: CGFloat = 200
+        static let commonStepWidth: CGFloat = 100
         static let shift: CGFloat = 5
+    }
+    
+    var widths: [CGFloat] = []
+        
+    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        indexPath.section == 0
+    }
+        
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = widths[indexPath.item]
+        return .init(width: width, height: Constants.stepHeight)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        widths[indexPath.item] = commonW
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        widths[indexPath.item] = selectedW
+        collectionView.performBatchUpdates(nil, completion: nil)
+        jumpToStepAtIndex(index: indexPath.item)
     }
     
     private var currentStepIndex: Int = 0
@@ -50,50 +84,25 @@ public class CCStepsBarView: UIStackView {
     public var stepEdgeInsets = UIEdgeInsets(withInset: Constants.shift)
     public weak var stepsDataSource: CCStepsBarDataSource?
     public weak var stepsDelegate: CCStepsBarDelegate?
-    private var widthConstraints: [NSLayoutConstraint] = []
     
     /// Fully reloads all the layout of stepsbar
-    public func reloadData() {
+    public func reloadAllData() {
         if !checkStepsNumber() {
             return
         }
         
-        guard let stepsDataSource = stepsDataSource else {
-            return
-        }
-        
-        subviews.forEach { stepbarSubView in
-            stepbarSubView.removeFromSuperview()
-        }
-        
-        for i in 0..<stepsDataSource.numberOfSteps {
-            let stepContainerView = CCStepsBarContainerView(frame: .zero)
-            stepContainerView.tapBlock = { [weak self] in
-                guard let self = self else {
-                    return
-                }
-
-                self.activateStepAtIndex(index: i)
-            }
-            addArrangedSubview(stepContainerView)
-
-            let indicatorView = stepsDataSource.stepBarIndicator(index: i)
-            indicatorView.translatesAutoresizingMaskIntoConstraints = false
-            stepContainerView.addSubview(indicatorView)
-
-            let minimalStepWidth = stepsDataSource.minimalStepWidthAtIndex(index: i)
-
-            let widthConstraint = stepContainerView.widthAnchor.constraint(greaterThanOrEqualToConstant: minimalStepWidth)
-            widthConstraints.append(widthConstraint)
-            NSLayoutConstraint.activate([
-                indicatorView.topAnchor.constraint(equalTo: stepContainerView.topAnchor, constant: stepEdgeInsets.top),
-                indicatorView.bottomAnchor.constraint(equalTo: stepContainerView.bottomAnchor, constant: stepEdgeInsets.bottom),
-                indicatorView.leadingAnchor.constraint(equalTo: stepContainerView.leadingAnchor, constant: stepEdgeInsets.left),
-                indicatorView.trailingAnchor.constraint(equalTo: stepContainerView.trailingAnchor, constant: stepEdgeInsets.right),
-                
-                widthConstraint,
-            ])
-        }
+        dataSource = stepsDataSource
+        delegate = self
+        let stepNib = UINib(nibName: "CCStepCell", bundle: nil)
+        register(stepNib, forCellWithReuseIdentifier: "step")
+        reloadData()
+        let count = collectionViewLayout.collectionView?.numberOfItems(inSection: 0) ?? 0
+        let spacing = (collectionViewLayout as? UICollectionViewFlowLayout)?.minimumInteritemSpacing ?? 0
+        let sumOfSpacing = spacing * max(0, CGFloat(count) - 1)
+        let width = ((superview?.frame.width ?? frame.width) -  sumOfSpacing) / (CGFloat(count) + 1)
+        commonW = width
+        selectedW = width * 2
+        widths = .init(repeating: commonW, count: count)
     }
     
     /// Jump to step with exact index
@@ -139,25 +148,22 @@ public class CCStepsBarView: UIStackView {
             return
         }
         
+        guard let dataSource = stepsDataSource else {
+            return
+        }
+        
         if currentStepIndex < index {
-            guard stepsDelegate.isCompleted(step: currentStepIndex) else {
+            guard dataSource.canJumpTo(step: currentStepIndex) else {
                 print("show Error: step \(currentStepIndex) is not completed")
                 stepsDelegate.showIncompletionError(step: currentStepIndex)
                 return
             }
         }
         
-        currentStepIndex = index
+        widths[index] = selectedW
+        selectItem(at: IndexPath(item: index, section: 0), animated: true, scrollPosition: .centeredHorizontally)
         
-        UIView.animate(withDuration: 0.3) {
-            self.widthConstraints[index].priority = .init(rawValue: 1)
-
-            self.widthConstraints.forEach { constraint in
-                constraint.priority = .required
-            }
-            
-            self.layoutIfNeeded()
-        }
+        currentStepIndex = index
         
         stepsDelegate.stepSelected(index: currentStepIndex)
     }
@@ -175,6 +181,18 @@ public class CCStepsBarView: UIStackView {
         return true
     }
     
+}
+
+private extension UIView {
+    func fillWith(subview: UIView, insets: UIEdgeInsets, and widthConstraint: NSLayoutConstraint) {
+        NSLayoutConstraint.activate([
+            subview.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
+            subview.bottomAnchor.constraint(equalTo: bottomAnchor, constant: insets.bottom),
+            subview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.left),
+            subview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: insets.right),
+            widthConstraint,
+        ])
+    }
 }
 
 private extension UIEdgeInsets {
