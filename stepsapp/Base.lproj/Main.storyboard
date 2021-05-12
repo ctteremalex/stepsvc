@@ -35,12 +35,16 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="YNe-ox-nmy">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="9VH-Qt-z2c"/>
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="list.bullet.rectangle" catalog="system" id="9VH-Qt-z2c"/>
                         <rightBarButtonItems>
                             <barButtonItem title="Item" image="arrowshape.turn.up.right" catalog="system" id="fQF-xX-kk2"/>
                             <barButtonItem title="Item" image="arrowshape.turn.up.backward" catalog="system" id="EI2-Hf-Br8"/>
                         </rightBarButtonItems>
                     </navigationItem>
+                    <connections>
+                        <outlet property="nextButton" destination="fQF-xX-kk2" id="6ni-Yo-xm3"/>
+                        <outlet property="previousButton" destination="EI2-Hf-Br8" id="qwB-bt-VJP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -50,6 +54,7 @@
     <resources>
         <image name="arrowshape.turn.up.backward" catalog="system" width="128" height="106"/>
         <image name="arrowshape.turn.up.right" catalog="system" width="128" height="106"/>
+        <image name="list.bullet.rectangle" catalog="system" width="128" height="93"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

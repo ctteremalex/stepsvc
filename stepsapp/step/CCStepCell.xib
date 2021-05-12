@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No property" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NV0-kg-GpR">
-                    <rect key="frame" x="68" y="107" width="92" height="21"/>
+                    <rect key="frame" x="4" y="0.0" width="220" height="235"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -24,8 +24,10 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="NV0-kg-GpR" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="IVx-9E-g7g"/>
-                <constraint firstItem="NV0-kg-GpR" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="hZ1-8Y-zqs"/>
+                <constraint firstItem="NV0-kg-GpR" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3xh-H0-LtA"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="NV0-kg-GpR" secondAttribute="trailing" constant="4" id="MfS-2n-ulm"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="NV0-kg-GpR" secondAttribute="bottom" id="ONF-8r-oBo"/>
+                <constraint firstItem="NV0-kg-GpR" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="4" id="STQ-xX-io1"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

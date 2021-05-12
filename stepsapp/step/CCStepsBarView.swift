@@ -17,15 +17,7 @@ public protocol CCStepsBarDataSource: UICollectionViewDataSource {
     /// - Parameter index: index of step for which we are looking for width
     func minimalStepWidthAtIndex(index: Int) -> CGFloat
     
-//    /// UIView which will be placed on bar as step indicator
-//    /// - Parameter index: index of step
-//    func stepBarIndicator(index: Int) -> UIView
-//    
-//    /// UIView which will be placed on bar as active step indicator
-//    /// - Parameter index: index of step
-//    func stepBarActiveIndicator(index: Int) -> UIView
-    
-    ///
+    /// checking the step status
     func canJumpTo(step: Int) -> Bool
 }
 
@@ -41,6 +33,12 @@ public protocol CCStepsBarDelegate: AnyObject {
     /// Show an error for index
     /// - Parameter step: index of step
     func showIncompletionError(step: Int)
+    
+    /// Allows to jump next step by step
+    func jumpToNext()
+    
+    /// Allows to jump next step by step
+    func jumpToPrevious()
 }
 
 fileprivate let shift: CGFloat = 5
@@ -48,6 +46,23 @@ fileprivate let shift: CGFloat = 5
 /// Stepsbar showing all the steps which user can choose
 public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
+    enum JumpType {
+        case selectFromCell(Int)
+        case initialValue(Int)
+        case jumpTo(step: Int)
+        
+        var index: Int {
+            switch self {
+            case .initialValue(let step):
+                return step
+            case .selectFromCell(let step):
+                return step
+            case .jumpTo(let step):
+                return step
+            }
+        }
+    }
+    
     private var commonW: CGFloat = Constants.commonStepWidth
     private var selectedW: CGFloat = Constants.selectedStepWidth
     
@@ -61,7 +76,7 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
     var widths: [CGFloat] = []
         
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        indexPath.section == 0
+        true
     }
         
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -76,7 +91,7 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         widths[indexPath.item] = selectedW
         collectionView.performBatchUpdates(nil, completion: nil)
-        jumpToStepAtIndex(index: indexPath.item)
+        activateStepAtIndex(index: .selectFromCell(indexPath.item))
     }
     
     private var currentStepIndex: Int = 0
@@ -96,19 +111,34 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         let stepNib = UINib(nibName: "CCStepCell", bundle: nil)
         register(stepNib, forCellWithReuseIdentifier: "step")
         reloadData()
+        showsHorizontalScrollIndicator = false
         let count = collectionViewLayout.collectionView?.numberOfItems(inSection: 0) ?? 0
         let spacing = (collectionViewLayout as? UICollectionViewFlowLayout)?.minimumInteritemSpacing ?? 0
         let sumOfSpacing = spacing * max(0, CGFloat(count) - 1)
         let width = ((superview?.frame.width ?? frame.width) -  sumOfSpacing) / (CGFloat(count) + 1)
-        commonW = width
-        selectedW = width * 2
+        
+        if count > 5 {
+            commonW = 150
+        } else {
+            commonW = width
+        }
+        
+        selectedW = commonW * 2
         widths = .init(repeating: commonW, count: count)
+        
+        initialSelection(step: 0)
     }
     
+    /// Select a step with exact index
+    /// - Parameter index: index of step
+    public func initialSelectStep(index: Int) {
+        activateStepAtIndex(index: .initialValue(index))
+    }
+
     /// Jump to step with exact index
     /// - Parameter index: index of step
     public func jumpToStepAtIndex(index: Int) {
-        activateStepAtIndex(index: index)
+        activateStepAtIndex(index: .jumpTo(step: index))
     }
     
     /// Check borders according to current step and if possible switch to the next one
@@ -122,11 +152,11 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         }
         
         let nextStepIndex = currentStepIndex + 1
-        if nextStepIndex > stepsDataSource.numberOfSteps {
+        if nextStepIndex >= stepsDataSource.numberOfSteps {
             return
         }
         
-        activateStepAtIndex(index: nextStepIndex)
+        activateStepAtIndex(index: .jumpTo(step: nextStepIndex))
     }
     
     /// Check borders and switch to previous step
@@ -136,10 +166,10 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
             return
         }
         
-        activateStepAtIndex(index: previousStepIndex)
+        activateStepAtIndex(index: .jumpTo(step: previousStepIndex))
     }
     
-    private func activateStepAtIndex(index: Int) {
+    private func activateStepAtIndex(index: JumpType) {
         if !checkStepsNumber() {
             return
         }
@@ -152,20 +182,43 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
             return
         }
         
-        if currentStepIndex < index {
-            guard dataSource.canJumpTo(step: currentStepIndex) else {
-                print("show Error: step \(currentStepIndex) is not completed")
+        switch index {
+        case .initialValue(let step):
+            widths[step] = selectedW
+            selectCell(at: step, andDeselect: currentStepIndex)
+            
+            currentStepIndex = step
+        case .jumpTo(step: let step):
+            guard dataSource.canJumpTo(step: step) else {
                 stepsDelegate.showIncompletionError(step: currentStepIndex)
                 return
             }
+            
+            widths[step] = selectedW
+            selectCell(at: step, andDeselect: currentStepIndex)
+            
+            currentStepIndex = step
+            
+        case .selectFromCell(let step):
+            currentStepIndex = step
         }
         
-        widths[index] = selectedW
-        selectItem(at: IndexPath(item: index, section: 0), animated: true, scrollPosition: .centeredHorizontally)
-        
-        currentStepIndex = index
-        
         stepsDelegate.stepSelected(index: currentStepIndex)
+    }
+    
+    private func selectCell(at index: Int, andDeselect oldIndex: Int) {
+        collectionView(self, didDeselectItemAt: IndexPath(row: oldIndex, section: 0))
+        collectionView(self, didSelectItemAt: IndexPath(row: index, section: 0))
+        self.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+    }
+    
+    private func initialSelection(step: Int) {
+        widths[step] = selectedW
+        selectItem(at: IndexPath(item: step, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+        
+        currentStepIndex = step
+        
+        stepsDelegate?.stepSelected(index: currentStepIndex)
     }
     
     private func checkStepsNumber() -> Bool {

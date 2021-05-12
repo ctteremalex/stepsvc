@@ -10,8 +10,7 @@ import UIKit
 fileprivate let MinimalStepWidth: CGFloat = 80
 
 class ViewController: UIViewController, CCStepsDataSource {
-    
-    var widths: [CGFloat] = []
+    var currentIndex: Int = 0
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         indexPath.section == 0
@@ -22,12 +21,16 @@ class ViewController: UIViewController, CCStepsDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "step", for: indexPath) as! CCStepCell
         
         cell.backgroundColor = .gray
         cell.config(step: stepsList[indexPath.row])
         return cell
     }
+    
+    @IBOutlet private weak var nextButton: UIBarButtonItem!
+    @IBOutlet private weak var previousButton: UIBarButtonItem!
     
     private var stepsList = [CCStep]()
 
@@ -58,11 +61,29 @@ class ViewController: UIViewController, CCStepsDataSource {
         let vc4 = StepViewController()
         vc4.title = "VC4"
         vc4.view.backgroundColor = .blue
-        stepsList.append(CCStep(position: .right, minimalStepLabelWidth: MinimalStepWidth, viewController: vc4, selectionBlock: {
+        stepsList.append(CCStep(position: .middle, minimalStepLabelWidth: MinimalStepWidth, viewController: vc4, selectionBlock: {
             print("selected step is 04 with BLUE")
         }, canJumpToStep: canJumpTo))
         
+        let vc5 = StepViewController()
+        vc5.title = "VC5"
+        vc5.view.backgroundColor = .brown
+        stepsList.append(CCStep(position: .middle, minimalStepLabelWidth: MinimalStepWidth, viewController: vc5, selectionBlock: {
+            print("selected step is 05 with BROWN")
+        }, canJumpToStep: canJumpTo))
+        
+        let vc6 = StepViewController()
+        vc6.title = "VC6"
+        vc6.view.backgroundColor = .cyan
+        stepsList.append(CCStep(position: .right, minimalStepLabelWidth: MinimalStepWidth, viewController: vc6, selectionBlock: {
+            print("selected step is 06 with CYAN")
+        }, canJumpToStep: canJumpTo))
+        
         let controller = CCStepsViewController(stepsDataSource: self)
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "Next", style: .done, target: controller, action: #selector(controller.jumpToNext)),
+            UIBarButtonItem(title: "Previous", style: .done, target: controller, action: #selector(controller.jumpToPrevious))
+        ]
         
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         addChild(controller)
@@ -84,11 +105,10 @@ class ViewController: UIViewController, CCStepsDataSource {
     }
     
     func canJumpTo(step: Int) -> Bool {
-        true
+        stepsList[currentIndex].viewController.stepIsReady
     }
     
     func stepAtIndex(index: Int) -> CCStep {
         stepsList[index]
     }
-    
 }

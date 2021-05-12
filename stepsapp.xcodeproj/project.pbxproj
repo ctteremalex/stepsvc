@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		412E01ED264417FF00338EC9 /* CCStepsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412E01EC264417FF00338EC9 /* CCStepsLayout.swift */; };
 		412E01EF2644216E00338EC9 /* CCStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412E01EE2644216E00338EC9 /* CCStepCell.swift */; };
 		412E01F1264421E600338EC9 /* CCStepCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 412E01F0264421E600338EC9 /* CCStepCell.xib */; };
-		415579F5264523E300FC725D /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415579F4264523E300FC725D /* PinterestLayout.swift */; };
 		41F7ADCC2641324B00EBE90C /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F7ADCB2641324B00EBE90C /* StepViewController.swift */; };
 		41F7AE412644020900EBE90C /* CCStepsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F7AE402644020800EBE90C /* CCStepsViewController.swift */; };
 		E36A5B3D263AC49A007A2B9B /* CCStepsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */; };
@@ -25,10 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		412E01EC264417FF00338EC9 /* CCStepsLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStepsLayout.swift; sourceTree = "<group>"; };
 		412E01EE2644216E00338EC9 /* CCStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStepCell.swift; sourceTree = "<group>"; };
 		412E01F0264421E600338EC9 /* CCStepCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCStepCell.xib; sourceTree = "<group>"; };
-		415579F4264523E300FC725D /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		41F7ADCB2641324B00EBE90C /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
 		41F7AE402644020800EBE90C /* CCStepsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCStepsViewController.swift; sourceTree = "<group>"; };
 		E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStepsBarView.swift; sourceTree = "<group>"; };
@@ -90,11 +86,9 @@
 		E39793A02639AEB300009DFC /* step */ = {
 			isa = PBXGroup;
 			children = (
-				412E01EC264417FF00338EC9 /* CCStepsLayout.swift */,
-				415579F4264523E300FC725D /* PinterestLayout.swift */,
-				E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */,
 				412E01EE2644216E00338EC9 /* CCStepCell.swift */,
 				412E01F0264421E600338EC9 /* CCStepCell.xib */,
+				E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */,
 				41F7AE402644020800EBE90C /* CCStepsViewController.swift */,
 				E36A5B47263BD59C007A2B9B /* CCStepsBarContainerView.swift */,
 				E36A5B3F263AE658007A2B9B /* CCStep.swift */,
@@ -180,10 +174,8 @@
 				E36A5B3D263AC49A007A2B9B /* CCStepsBarView.swift in Sources */,
 				412E01EF2644216E00338EC9 /* CCStepCell.swift in Sources */,
 				E397938E2639AE5600009DFC /* SceneDelegate.swift in Sources */,
-				415579F5264523E300FC725D /* PinterestLayout.swift in Sources */,
 				41F7AE412644020900EBE90C /* CCStepsViewController.swift in Sources */,
 				41F7ADCC2641324B00EBE90C /* StepViewController.swift in Sources */,
-				412E01ED264417FF00338EC9 /* CCStepsLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
