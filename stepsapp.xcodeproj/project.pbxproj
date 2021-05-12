@@ -3,10 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BC128272647312900445876 /* CCGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC128262647312900445876 /* CCGridViewController.swift */; };
+		0BC12829264731F200445876 /* CCSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC12828264731F200445876 /* CCSection.swift */; };
+		0BC1282C264B1F6E00445876 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0BC1282B264B1F6E00445876 /* SnapKit */; };
+		0BC1282E264C251200445876 /* Randomizers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC1282D264C251200445876 /* Randomizers.swift */; };
+		0BC12830264C253300445876 /* CCGridSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC1282F264C253300445876 /* CCGridSectionView.swift */; };
 		E36A5B3A263AC356007A2B9B /* CCStepsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36A5B39263AC356007A2B9B /* CCStepsViewController.swift */; };
 		E36A5B3D263AC49A007A2B9B /* CCStepsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */; };
 		E36A5B40263AE658007A2B9B /* CCStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36A5B3F263AE658007A2B9B /* CCStep.swift */; };
@@ -20,6 +25,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0BC128262647312900445876 /* CCGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCGridViewController.swift; sourceTree = "<group>"; };
+		0BC12828264731F200445876 /* CCSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCSection.swift; sourceTree = "<group>"; };
+		0BC1282D264C251200445876 /* Randomizers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Randomizers.swift; sourceTree = "<group>"; };
+		0BC1282F264C253300445876 /* CCGridSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCGridSectionView.swift; sourceTree = "<group>"; };
 		E36A5B39263AC356007A2B9B /* CCStepsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CCStepsViewController.swift; path = stepsapp/CCStepsViewController.swift; sourceTree = SOURCE_ROOT; };
 		E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStepsBarView.swift; sourceTree = "<group>"; };
 		E36A5B3F263AE658007A2B9B /* CCStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStep.swift; sourceTree = "<group>"; };
@@ -39,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BC1282C264B1F6E00445876 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +93,10 @@
 				E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */,
 				E36A5B47263BD59C007A2B9B /* CCStepsBarContainerView.swift */,
 				E36A5B3F263AE658007A2B9B /* CCStep.swift */,
+				0BC128262647312900445876 /* CCGridViewController.swift */,
+				0BC1282F264C253300445876 /* CCGridSectionView.swift */,
+				0BC12828264731F200445876 /* CCSection.swift */,
+				0BC1282D264C251200445876 /* Randomizers.swift */,
 			);
 			path = step;
 			sourceTree = "<group>";
@@ -103,6 +117,9 @@
 			dependencies = (
 			);
 			name = stepsapp;
+			packageProductDependencies = (
+				0BC1282B264B1F6E00445876 /* SnapKit */,
+			);
 			productName = stepsapp;
 			productReference = E39793882639AE5600009DFC /* stepsapp.app */;
 			productType = "com.apple.product-type.application";
@@ -130,6 +147,9 @@
 				Base,
 			);
 			mainGroup = E397937F2639AE5600009DFC;
+			packageReferences = (
+				0BC1282A264B1F6D00445876 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = E39793892639AE5600009DFC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -157,12 +177,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BC128272647312900445876 /* CCGridViewController.swift in Sources */,
+				0BC12830264C253300445876 /* CCGridSectionView.swift in Sources */,
 				E36A5B48263BD59C007A2B9B /* CCStepsBarContainerView.swift in Sources */,
 				E39793902639AE5600009DFC /* ViewController.swift in Sources */,
 				E397938C2639AE5600009DFC /* AppDelegate.swift in Sources */,
 				E36A5B40263AE658007A2B9B /* CCStep.swift in Sources */,
 				E36A5B3D263AC49A007A2B9B /* CCStepsBarView.swift in Sources */,
+				0BC1282E264C251200445876 /* Randomizers.swift in Sources */,
 				E397938E2639AE5600009DFC /* SceneDelegate.swift in Sources */,
+				0BC12829264731F200445876 /* CCSection.swift in Sources */,
 				E36A5B3A263AC356007A2B9B /* CCStepsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -365,6 +389,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0BC1282A264B1F6D00445876 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0BC1282B264B1F6E00445876 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0BC1282A264B1F6D00445876 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E39793802639AE5600009DFC /* Project object */;
 }

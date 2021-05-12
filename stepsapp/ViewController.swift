@@ -17,25 +17,25 @@ class ViewController: UIViewController, CCStepsDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let vc1 = UIViewController()
-        vc1.view.backgroundColor = .green
+        let vc1 = CCGridViewController()
+        vc1.view.backgroundColor = .lightGray
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc1, selectionBlock: {
             print("selected step is 01 with GREEN")
         }))
 
-        let vc2 = UIViewController()
-        vc2.view.backgroundColor = .red
+        let vc2 = CCGridViewController()
+        vc2.view.backgroundColor = .white
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc2, selectionBlock: {
             print("selected step is 02 with RED")
         }))
 
-        let vc3 = UIViewController()
-        vc3.view.backgroundColor = .yellow
+        let vc3 = CCGridViewController()
+        vc3.view.backgroundColor = .gray
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc3, selectionBlock: {
             print("selected step is 03 with YELLOW")
         }))
 
-        let vc4 = UIViewController()
+        let vc4 = CCGridViewController()
         vc4.view.backgroundColor = .blue
         stepsList.append(CCStep(minimalStepLabelWidth: MinimalStepWidth, viewController: vc4, selectionBlock: {
             print("selected step is 04 with BLUE")
