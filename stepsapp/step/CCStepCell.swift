@@ -14,6 +14,7 @@ class CCStepCell: UICollectionViewCell {
     private var arrowLayer: CAShapeLayer = .init()
     private var step: CCStep?
     
+    /// config the cell with CCStep
     func config(step: CCStep) {
         self.step = step
         background.backgroundColor = .clear

@@ -68,7 +68,6 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         stepsbar.isScrollEnabled = true
         dataSource = stepsDataSource
         stepsbar.dataSource = stepsDataSource
-        
         stepsbar.reloadData()
     }
     

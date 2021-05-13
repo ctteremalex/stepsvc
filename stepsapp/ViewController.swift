@@ -10,7 +10,7 @@ import UIKit
 fileprivate let MinimalStepWidth: CGFloat = 80
 
 class ViewController: UIViewController, CCStepsDataSource {
-    enum Constants {
+    private enum Constants {
         static let stepCellId: String = "step"
         static let horizontalInset: CGFloat = 8
     }
