@@ -32,7 +32,6 @@ public struct CCStep {
     public var position: Position
     public var stepLabelWidth: Width = .init(minimum: 0, value: 1)
     public var viewController: StepViewControllerDelegate
-    public var selectionBlock: StepSelectionHandler?
     
     public var canJumpToStep: ((_ index: Int) -> Bool)
 }

@@ -8,22 +8,24 @@
 import UIKit
 
 public protocol CCStepsDataSource: CCStepsBarDataSource {
-
-    var currentIndex: Int { get set }
     
+    /// `CCStep` for index
     func stepAtIndex(index: Int) -> CCStep
+    
 }
 
 public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     
+    /// Attach this function as Selector method to jump to next step
     @IBAction public func jumpToNext() {
         stepsbar.jumpToNextStep()
     }
     
+    /// Attach this function as Selector method to jump to previous step
     @IBAction public func jumpToPrevious() {
         stepsbar.jumpToPreviousStep()
     }
-    
+        
     public var allStepsCompleted: Bool {
         guard let source = dataSource else {
             return false
@@ -48,7 +50,6 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     
     private lazy var layout: UICollectionViewLayout = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
         return layout
@@ -77,6 +78,11 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         createLayout()
     }
     
+    /// Config inner UICollectionView's parameters, register cells and and adjust content insets
+    public func configCollection(callback: (_ collection: UICollectionView) -> Void) {
+        callback(stepsbar)
+    }
+    
     private func createLayout() {
         stepsView.translatesAutoresizingMaskIntoConstraints = false
         stepsbar.translatesAutoresizingMaskIntoConstraints = false
@@ -96,7 +102,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         ])
                 
         stepsbar.reloadAllData()
-//        stepsbar.initialSelectStep(index: 1)
+        stepsbar.initialSelectStep(index: 1)
     }
 
     public func stepSelected(index: Int) {
@@ -107,13 +113,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         let step = dataSource.stepAtIndex(index: index)
         showStepViewController(step: step)
 
-        guard let stepSelectionBlock = step.selectionBlock else {
-            return
-        }
-        
-        dataSource.currentIndex = index
-         
-        stepSelectionBlock()
+        dataSource.didSelected(step: index)
     }
     
     private func hideCurrentStepViewController() {

@@ -23,11 +23,14 @@ public protocol CCStepsBarDataSource: UICollectionViewDataSource {
     
     /// checking the step status
     func canJumpTo(step: Int) -> Bool
+    
+    func didSelected(step: Int)
 }
 
-/// Provides events which are happeneed inside stepsbar
+/// Provides events which are happened inside stepsbar
 public protocol CCStepsBarDelegate: AnyObject {
     
+    /// Check the completion of all steps
     var allStepsCompleted: Bool { get }
     
     /// Step with index was selected
@@ -45,12 +48,10 @@ public protocol CCStepsBarDelegate: AnyObject {
     func jumpToPrevious()
 }
 
-fileprivate let shift: CGFloat = 5
-
 /// Stepsbar showing all the steps which user can choose
-public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-
-    enum JumpType {
+public class CCStepsBarView: UICollectionView {
+    
+    private enum JumpType {
         case selectFromCell(Int)
         case initialValue(Int)
         case jumpTo(step: Int)
@@ -67,40 +68,15 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         }
     }
     
-    private enum Constants {
-        static let stepHeight: CGFloat = 44
-        static let selectedStepWidth: CGFloat = 200
-        static let commonStepWidth: CGFloat = 100
-        static let shift: CGFloat = 5
-    }
-    
-    var widths: [CGFloat] = []
-        
-    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        true
-    }
-        
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = widths[indexPath.item]
-        return .init(width: width, height: collectionView.frame.height)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        widths[indexPath.item] = stepsDataSource!.minimalStepWidthAtIndex(index: indexPath.row)
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        widths[indexPath.item] = stepsDataSource!.selectedStepWidthAtIndex(index: indexPath.row)
-        collectionView.performBatchUpdates(nil, completion: nil)
-        activateStepAtIndex(index: .selectFromCell(indexPath.item))
-    }
-    
+    private var widths: [CGFloat] = []    
     private var currentStepIndex: Int = 0
     
-    public var stepEdgeInsets = UIEdgeInsets(withInset: Constants.shift)
+    /// Source of data for CCStepsBarView
     public weak var stepsDataSource: CCStepsBarDataSource?
-    public weak var stepsDelegate: CCStepsBarDelegate?
     
+    /// Provides events which are happened inside stepsbar
+    public weak var stepsDelegate: CCStepsBarDelegate?
+        
     /// Fully reloads all the layout of stepsbar
     public func reloadAllData() {
         if !checkStepsNumber() {
@@ -109,17 +85,12 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         
         dataSource = stepsDataSource
         delegate = self
-        let stepNib = UINib(nibName: "CCStepCell", bundle: nil)
-        register(stepNib, forCellWithReuseIdentifier: "step")
-        reloadData()
         showsHorizontalScrollIndicator = false
 
         let count = stepsDataSource?.numberOfSteps ?? 0
         widths = (0..<count).map { value in
             stepsDataSource?.minimalStepWidthAtIndex(index: value) ?? 0
         }
-        
-        
         
         initialSelection(step: 0)
     }
@@ -233,9 +204,20 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
     
 }
 
-private extension UIEdgeInsets {
-    init(withInset: CGFloat) {
-        let inset = withInset
-        self = .init(top: inset, left: inset, bottom: -inset, right: -inset)
+extension CCStepsBarView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = widths[indexPath.item]
+        return .init(width: width, height: collectionView.frame.height)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        widths[indexPath.item] = stepsDataSource!.minimalStepWidthAtIndex(index: indexPath.row)
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        widths[indexPath.item] = stepsDataSource!.selectedStepWidthAtIndex(index: indexPath.row)
+        collectionView.performBatchUpdates(nil, completion: nil)
+        activateStepAtIndex(index: .selectFromCell(indexPath.item))
+        stepsDataSource?.didSelected(step: indexPath.row)
     }
 }
