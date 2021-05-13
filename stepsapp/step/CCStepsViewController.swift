@@ -50,7 +50,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 2
+        layout.minimumInteritemSpacing = 0
         return layout
     }()
     
@@ -62,11 +62,11 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         self.init()
 
         stepsbar.stepsDelegate = self
+        stepsbar.backgroundColor = .white
         stepsbar.stepsDataSource = stepsDataSource
         stepsbar.isScrollEnabled = true
         dataSource = stepsDataSource
         stepsbar.dataSource = stepsDataSource
-        
         
         stepsbar.reloadData()
     }
@@ -94,7 +94,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
             stepsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stepsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
-        
+                
         stepsbar.reloadAllData()
 //        stepsbar.initialSelectStep(index: 1)
     }

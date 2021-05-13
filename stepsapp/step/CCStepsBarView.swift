@@ -17,6 +17,10 @@ public protocol CCStepsBarDataSource: UICollectionViewDataSource {
     /// - Parameter index: index of step for which we are looking for width
     func minimalStepWidthAtIndex(index: Int) -> CGFloat
     
+    /// Wider width for selected step container in bar
+    /// - Parameter index: index of selected step for which we are looking for width
+    func selectedStepWidthAtIndex(index: Int) -> CGFloat
+    
     /// checking the step status
     func canJumpTo(step: Int) -> Bool
 }
@@ -63,9 +67,6 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         }
     }
     
-    private var commonW: CGFloat = Constants.commonStepWidth
-    private var selectedW: CGFloat = Constants.selectedStepWidth
-    
     private enum Constants {
         static let stepHeight: CGFloat = 44
         static let selectedStepWidth: CGFloat = 200
@@ -81,15 +82,15 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = widths[indexPath.item]
-        return .init(width: width, height: Constants.stepHeight)
+        return .init(width: width, height: collectionView.frame.height)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        widths[indexPath.item] = commonW
+        widths[indexPath.item] = stepsDataSource!.minimalStepWidthAtIndex(index: indexPath.row)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        widths[indexPath.item] = selectedW
+        widths[indexPath.item] = stepsDataSource!.selectedStepWidthAtIndex(index: indexPath.row)
         collectionView.performBatchUpdates(nil, completion: nil)
         activateStepAtIndex(index: .selectFromCell(indexPath.item))
     }
@@ -112,19 +113,13 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         register(stepNib, forCellWithReuseIdentifier: "step")
         reloadData()
         showsHorizontalScrollIndicator = false
-        let count = collectionViewLayout.collectionView?.numberOfItems(inSection: 0) ?? 0
-        let spacing = (collectionViewLayout as? UICollectionViewFlowLayout)?.minimumInteritemSpacing ?? 0
-        let sumOfSpacing = spacing * max(0, CGFloat(count) - 1)
-        let width = ((superview?.frame.width ?? frame.width) -  sumOfSpacing) / (CGFloat(count) + 1)
-        
-        if count > 5 {
-            commonW = 150
-        } else {
-            commonW = width
+
+        let count = stepsDataSource?.numberOfSteps ?? 0
+        widths = (0..<count).map { value in
+            stepsDataSource?.minimalStepWidthAtIndex(index: value) ?? 0
         }
         
-        selectedW = commonW * 2
-        widths = .init(repeating: commonW, count: count)
+        
         
         initialSelection(step: 0)
     }
@@ -184,7 +179,7 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         
         switch index {
         case .initialValue(let step):
-            widths[step] = selectedW
+            widths[step] = dataSource.minimalStepWidthAtIndex(index: step)
             selectCell(at: step, andDeselect: currentStepIndex)
             
             currentStepIndex = step
@@ -194,7 +189,7 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
                 return
             }
             
-            widths[step] = selectedW
+            widths[step] = dataSource.minimalStepWidthAtIndex(index: step)
             selectCell(at: step, andDeselect: currentStepIndex)
             
             currentStepIndex = step
@@ -207,13 +202,15 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
     }
     
     private func selectCell(at index: Int, andDeselect oldIndex: Int) {
-        collectionView(self, didDeselectItemAt: IndexPath(row: oldIndex, section: 0))
-        collectionView(self, didSelectItemAt: IndexPath(row: index, section: 0))
-        self.selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+        let old = IndexPath(row: oldIndex, section: 0)
+        let new = IndexPath(row: index, section: 0)
+        collectionView(self, didDeselectItemAt: old)
+        collectionView(self, didSelectItemAt: new)
+        selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredHorizontally)
     }
     
     private func initialSelection(step: Int) {
-        widths[step] = selectedW
+        widths[step] = stepsDataSource!.selectedStepWidthAtIndex(index: step)
         selectItem(at: IndexPath(item: step, section: 0), animated: true, scrollPosition: .centeredHorizontally)
         
         currentStepIndex = step
@@ -234,18 +231,6 @@ public class CCStepsBarView: UICollectionView, UICollectionViewDelegate, UIColle
         return true
     }
     
-}
-
-private extension UIView {
-    func fillWith(subview: UIView, insets: UIEdgeInsets, and widthConstraint: NSLayoutConstraint) {
-        NSLayoutConstraint.activate([
-            subview.topAnchor.constraint(equalTo: topAnchor, constant: insets.top),
-            subview.bottomAnchor.constraint(equalTo: bottomAnchor, constant: insets.bottom),
-            subview.leadingAnchor.constraint(equalTo: leadingAnchor, constant: insets.left),
-            subview.trailingAnchor.constraint(equalTo: trailingAnchor, constant: insets.right),
-            widthConstraint,
-        ])
-    }
 }
 
 private extension UIEdgeInsets {

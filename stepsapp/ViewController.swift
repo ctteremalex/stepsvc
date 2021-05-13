@@ -37,49 +37,58 @@ class ViewController: UIViewController, CCStepsDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let controller = CCStepsViewController(stepsDataSource: self)
+        
+        let count = 6
+        let spacing = 0
+        //controller.mini (collectionViewLayout as? UICollectionViewFlowLayout)?.minimumInteritemSpacing ?? 0
+        let widthValue = (view.frame.width) / (CGFloat(count) + 1)
+        
+        let width: CCStep.Width = .init(minimum: widthValue, value: widthValue * 2)
+        
         let vc1 = StepViewController()
         vc1.title = "VC1"
         vc1.view.backgroundColor = .green
-        stepsList.append(CCStep(position: .left, minimalStepLabelWidth: MinimalStepWidth, viewController: vc1, selectionBlock: {
+        stepsList.append(CCStep(position: .left, stepLabelWidth: width, viewController: vc1, selectionBlock: {
             print("selected step is 01 with GREEN")
         }, canJumpToStep: canJumpTo))
 
         let vc2 = StepViewController()
         vc2.title = "VC2"
         vc2.view.backgroundColor = .red
-        stepsList.append(CCStep(position: .middle, minimalStepLabelWidth: MinimalStepWidth, viewController: vc2, selectionBlock: {
+        stepsList.append(CCStep(position: .middle, stepLabelWidth: width, viewController: vc2, selectionBlock: {
             print("selected step is 02 with RED")
         }, canJumpToStep: canJumpTo))
 
         let vc3 = StepViewController()
         vc3.title = "VC3"
         vc3.view.backgroundColor = .yellow
-        stepsList.append(CCStep(position: .middle, minimalStepLabelWidth: MinimalStepWidth, viewController: vc3, selectionBlock: {
+        stepsList.append(CCStep(position: .middle, stepLabelWidth: width, viewController: vc3, selectionBlock: {
             print("selected step is 03 with YELLOW")
         }, canJumpToStep: canJumpTo))
 
         let vc4 = StepViewController()
         vc4.title = "VC4"
         vc4.view.backgroundColor = .blue
-        stepsList.append(CCStep(position: .middle, minimalStepLabelWidth: MinimalStepWidth, viewController: vc4, selectionBlock: {
+        stepsList.append(CCStep(position: .middle, stepLabelWidth: width, viewController: vc4, selectionBlock: {
             print("selected step is 04 with BLUE")
         }, canJumpToStep: canJumpTo))
         
         let vc5 = StepViewController()
         vc5.title = "VC5"
         vc5.view.backgroundColor = .brown
-        stepsList.append(CCStep(position: .middle, minimalStepLabelWidth: MinimalStepWidth, viewController: vc5, selectionBlock: {
+        stepsList.append(CCStep(position: .middle, stepLabelWidth: width, viewController: vc5, selectionBlock: {
             print("selected step is 05 with BROWN")
         }, canJumpToStep: canJumpTo))
         
         let vc6 = StepViewController()
         vc6.title = "VC6"
         vc6.view.backgroundColor = .cyan
-        stepsList.append(CCStep(position: .right, minimalStepLabelWidth: MinimalStepWidth, viewController: vc6, selectionBlock: {
+        stepsList.append(CCStep(position: .right, stepLabelWidth: width, viewController: vc6, selectionBlock: {
             print("selected step is 06 with CYAN")
         }, canJumpToStep: canJumpTo))
         
-        let controller = CCStepsViewController(stepsDataSource: self)
+        
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Next", style: .done, target: controller, action: #selector(controller.jumpToNext)),
             UIBarButtonItem(title: "Previous", style: .done, target: controller, action: #selector(controller.jumpToPrevious))
@@ -100,8 +109,12 @@ class ViewController: UIViewController, CCStepsDataSource {
         stepsList.count
     }
     
+    func selectedStepWidthAtIndex(index: Int) -> CGFloat {
+        stepsList[index].stepLabelWidth.value
+    }
+    
     func minimalStepWidthAtIndex(index: Int) -> CGFloat {
-        stepsList[index].minimalStepLabelWidth
+        stepsList[index].stepLabelWidth.minimum
     }
     
     func canJumpTo(step: Int) -> Bool {

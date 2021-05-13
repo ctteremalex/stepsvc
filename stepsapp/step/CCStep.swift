@@ -24,8 +24,13 @@ public struct CCStep {
         case middle
     }
     
+    public struct Width {
+        let minimum: CGFloat
+        let value: CGFloat
+    }
+    
     public var position: Position
-    public var minimalStepLabelWidth: CGFloat = 60
+    public var stepLabelWidth: Width = .init(minimum: 0, value: 1)
     public var viewController: StepViewControllerDelegate
     public var selectionBlock: StepSelectionHandler?
     
