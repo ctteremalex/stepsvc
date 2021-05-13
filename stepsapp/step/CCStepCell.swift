@@ -8,15 +8,24 @@
 import UIKit
 
 class CCStepCell: UICollectionViewCell {
+    
+    private var step: CCStep?
+    
+    private lazy var arrowLayer: CAShapeLayer = {
+        let arrow = CAShapeLayer()
+        arrow.strokeColor = UIColor.white.cgColor
+        arrow.lineWidth = 4
+        layer.addSublayer(arrow)
+        return arrow
+    }()
+        
     @IBOutlet private var propertyLabel: UILabel!
     @IBOutlet private var background: UIView!
-    
-    private var arrowLayer: CAShapeLayer = .init()
-    private var step: CCStep?
     
     /// config the cell with CCStep
     func config(step: CCStep) {
         self.step = step
+        
         background.backgroundColor = .clear
         selectedBackgroundView = background
         
@@ -31,11 +40,7 @@ class CCStepCell: UICollectionViewCell {
             propertyLabel.textAlignment = .right
         }
         
-        if step.viewController.stepIsReady {
-            backgroundColor = .clear
-        } else {
-            backgroundColor = .clear
-        }
+        backgroundColor = .clear
         
         if isSelected {
             addArrow(posititon: step.position)
@@ -62,30 +67,15 @@ class CCStepCell: UICollectionViewCell {
     private func addArrow(posititon: CCStep.Position) {
         let arrow = UIBezierPath.stepPath(position: posititon, width: width, height: bounds.height, midY: bounds.midY)
         
-        arrowLayer.strokeColor = UIColor.white.cgColor
-        arrowLayer.lineWidth = 4
         arrowLayer.path = arrow.cgPath
         arrowLayer.fillColor = UIColor.blue.cgColor
-        arrowLayer.lineJoin = CAShapeLayerLineJoin.round
-        arrowLayer.lineCap = CAShapeLayerLineCap.round
-        if !(layer.sublayers ?? []).contains(arrowLayer) {
-            layer.addSublayer(arrowLayer)
-        }
     }
     
     private func unselectedArrow(posititon: CCStep.Position, isReady: Bool) {
         let arrow = UIBezierPath.stepPath(position: posititon, width: width, height: bounds.height, midY: bounds.midY)
         
-        arrowLayer.strokeColor = UIColor.white.cgColor
-        arrowLayer.lineWidth = 4
         arrowLayer.path = arrow.cgPath
-        
         arrowLayer.fillColor = (isReady ? UIColor.green : UIColor.orange).cgColor
-        arrowLayer.lineJoin = CAShapeLayerLineJoin.round
-        arrowLayer.lineCap = CAShapeLayerLineCap.round
-        if !(layer.sublayers ?? []).contains(arrowLayer) {
-            layer.addSublayer(arrowLayer)
-        }
     }
 }
 

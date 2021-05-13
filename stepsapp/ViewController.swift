@@ -7,8 +7,6 @@
 
 import UIKit
 
-fileprivate let MinimalStepWidth: CGFloat = 80
-
 class ViewController: UIViewController, CCStepsDataSource {
     private enum Constants {
         static let stepCellId: String = "step"
@@ -20,10 +18,6 @@ class ViewController: UIViewController, CCStepsDataSource {
     func didSelected(step: Int) {
         currentIndex = step
         print("selected step is \(step)")
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        indexPath.section == 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -42,16 +36,17 @@ class ViewController: UIViewController, CCStepsDataSource {
     @IBOutlet private weak var nextButton: UIBarButtonItem!
     @IBOutlet private weak var previousButton: UIBarButtonItem!
     
+    private var stepsController: CCStepsViewController!
+    
     private var stepsList = [CCStep]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let controller = CCStepsViewController(stepsDataSource: self)
+        stepsController = controller
         
-        let count = 6
-        let widthValue = (view.frame.width - Constants.horizontalInset * 2) / (CGFloat(count) + 1)
-        let width: CCStep.Width = .init(minimum: widthValue, value: widthValue * 2)
+        let width: CCStep.Width = .init(minimum: 100, value: 100 * 2)
         
         let vc1 = StepViewController()
         vc1.title = "VC1"
@@ -95,7 +90,11 @@ class ViewController: UIViewController, CCStepsDataSource {
             collection.contentInset = .init(top: 0, left: Constants.horizontalInset, bottom: 0, right: Constants.horizontalInset)
         }
         
+        updateCellSize(size: view.frame.size, rotating: false)
+        
+        /// this line can load view of CCStepsViewController, so call updateCellSize before here
         controller.view.translatesAutoresizingMaskIntoConstraints = false
+        
         addChild(controller)
         view.addSubview(controller.view)
         NSLayoutConstraint.activate([
@@ -105,7 +104,27 @@ class ViewController: UIViewController, CCStepsDataSource {
             controller.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
-
+    
+    private func updateCellSize(size: CGSize, rotating: Bool) {
+        let count = numberOfSteps
+        let widthValue = (size.width - Constants.horizontalInset * 2) / (CGFloat(count) + 1)
+        let width = CCStep.Width(minimum: widthValue, value: widthValue * 2)
+        
+        (0..<count).forEach { step in
+            stepsList[step].stepLabelWidth = width
+        }
+        
+        if rotating {
+            stepsController.configCollection { collection in
+                collection.reloadForCurrentIndex()
+            }
+        }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        updateCellSize(size: size, rotating: true)
+    }
+    
     var numberOfSteps: Int {
         stepsList.count
     }

@@ -68,7 +68,6 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         stepsbar.isScrollEnabled = true
         dataSource = stepsDataSource
         stepsbar.dataSource = stepsDataSource
-        stepsbar.reloadData()
     }
     
     public override func viewDidLoad() {
@@ -78,7 +77,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     }
     
     /// Config inner UICollectionView's parameters, register cells and and adjust content insets
-    public func configCollection(callback: (_ collection: UICollectionView) -> Void) {
+    public func configCollection(callback: (_ collection: CCStepsBarView) -> Void) {
         callback(stepsbar)
     }
     
@@ -100,7 +99,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
             stepsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
                 
-        stepsbar.reloadAllData()
+        stepsbar.reloadAllData(initial: 1)
         stepsbar.initialSelectStep(index: 1)
     }
 
@@ -111,7 +110,6 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         hideCurrentStepViewController()
         let step = dataSource.stepAtIndex(index: index)
         showStepViewController(step: step)
-
         dataSource.didSelected(step: index)
     }
     

@@ -68,7 +68,6 @@ public class CCStepsBarView: UICollectionView {
         }
     }
     
-    private var widths: [CGFloat] = []    
     private var currentStepIndex: Int = 0
     
     /// Source of data for CCStepsBarView
@@ -78,7 +77,7 @@ public class CCStepsBarView: UICollectionView {
     public weak var stepsDelegate: CCStepsBarDelegate?
         
     /// Fully reloads all the layout of stepsbar
-    public func reloadAllData() {
+    public func reloadAllData(initial: Int) {
         if !checkStepsNumber() {
             return
         }
@@ -87,12 +86,13 @@ public class CCStepsBarView: UICollectionView {
         delegate = self
         showsHorizontalScrollIndicator = false
 
-        let count = stepsDataSource?.numberOfSteps ?? 0
-        widths = (0..<count).map { value in
-            stepsDataSource?.minimalStepWidthAtIndex(index: value) ?? 0
-        }
-        
-        initialSelection(step: 0)
+        currentStepIndex = initial
+    }
+    
+    /// Reload data and select the current index
+    public func reloadForCurrentIndex() {
+        reloadData() /// after reloading, select current step again
+        initialSelectStep(index: currentStepIndex)
     }
     
     /// Select a step with exact index
@@ -150,7 +150,6 @@ public class CCStepsBarView: UICollectionView {
         
         switch index {
         case .initialValue(let step):
-            widths[step] = dataSource.minimalStepWidthAtIndex(index: step)
             selectCell(at: step, andDeselect: currentStepIndex)
             
             currentStepIndex = step
@@ -160,7 +159,6 @@ public class CCStepsBarView: UICollectionView {
                 return
             }
             
-            widths[step] = dataSource.minimalStepWidthAtIndex(index: step)
             selectCell(at: step, andDeselect: currentStepIndex)
             
             currentStepIndex = step
@@ -170,18 +168,17 @@ public class CCStepsBarView: UICollectionView {
         }
         
         stepsDelegate.stepSelected(index: currentStepIndex)
+        performBatchUpdates(nil, completion: nil)
     }
     
     private func selectCell(at index: Int, andDeselect oldIndex: Int) {
         let old = IndexPath(row: oldIndex, section: 0)
         let new = IndexPath(row: index, section: 0)
-        collectionView(self, didDeselectItemAt: old)
-        collectionView(self, didSelectItemAt: new)
-        selectItem(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .centeredHorizontally)
+        deselectItem(at: old, animated: true)
+        selectItem(at: new, animated: true, scrollPosition: .centeredHorizontally)
     }
     
     private func initialSelection(step: Int) {
-        widths[step] = stepsDataSource!.selectedStepWidthAtIndex(index: step)
         selectItem(at: IndexPath(item: step, section: 0), animated: true, scrollPosition: .centeredHorizontally)
         
         currentStepIndex = step
@@ -206,18 +203,20 @@ public class CCStepsBarView: UICollectionView {
 
 extension CCStepsBarView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = widths[indexPath.item]
+        let width: CGFloat
+        let cell = collectionView.cellForItem(at: indexPath)
+        if cell?.isSelected == true {
+            width = stepsDataSource?.selectedStepWidthAtIndex(index: indexPath.item) ?? 0
+        } else {
+            width = stepsDataSource?.minimalStepWidthAtIndex(index: indexPath.item) ?? 0
+        }
+        
         return .init(width: width, height: collectionView.frame.height)
     }
     
-    public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        widths[indexPath.item] = stepsDataSource!.minimalStepWidthAtIndex(index: indexPath.row)
-    }
-    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        widths[indexPath.item] = stepsDataSource!.selectedStepWidthAtIndex(index: indexPath.row)
         collectionView.performBatchUpdates(nil, completion: nil)
         activateStepAtIndex(index: .selectFromCell(indexPath.item))
-        stepsDataSource?.didSelected(step: indexPath.row)
+        
     }
 }
