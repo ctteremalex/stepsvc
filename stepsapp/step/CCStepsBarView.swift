@@ -214,9 +214,15 @@ extension CCStepsBarView: UICollectionViewDelegate, UICollectionViewDelegateFlow
         return .init(width: width, height: collectionView.frame.height)
     }
     
+    public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let item = collectionView.cellForItem(at: indexPath) as? CCStepCell
+        item?.didChangedSelection(isSelected: false)
+    }
+    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.performBatchUpdates(nil, completion: nil)
         activateStepAtIndex(index: .selectFromCell(indexPath.item))
-        
+        collectionView.performBatchUpdates(nil, completion: nil)
+        let item = collectionView.cellForItem(at: indexPath) as? CCStepCell
+        item?.didChangedSelection(isSelected: true)
     }
 }

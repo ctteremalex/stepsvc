@@ -12,6 +12,7 @@ class CCStepCell: UICollectionViewCell {
         static let selectedColor: UIColor = .blue
         static let incompletedColor: UIColor = .orange
         static let completedColor: UIColor = .green
+        static let animationTimeOffset: TimeInterval = 0.1
     }
     
     private var step: CCStep?
@@ -20,11 +21,12 @@ class CCStepCell: UICollectionViewCell {
         let arrow = CAShapeLayer()
         arrow.strokeColor = UIColor.white.cgColor
         arrow.lineWidth = 4
+        arrow.backgroundColor = UIColor.black.cgColor
         layer.insertSublayer(arrow, at: 0)
         return arrow
     }()
     
-    @IBOutlet private var propertyLabel: UILabel!
+    @IBOutlet private var titleButton: UIButton!
     @IBOutlet private var background: UIView!
     
     /// config the cell with CCStep
@@ -35,25 +37,70 @@ class CCStepCell: UICollectionViewCell {
         selectedBackgroundView = background
         backgroundColor = .clear
         
-        propertyLabel.text = step.viewController.title
-        propertyLabel.textColor = .white
-        propertyLabel.textAlignment = .center
+        titleButton.setTitle(step.viewController.title, for: .normal)
+        titleButton.tintColor = .black
+        titleButton.imageView?.backgroundColor = .clear
+        titleButton.setTitleColor(.white, for: .normal)
+        titleButton.contentHorizontalAlignment = .center
         
         if isSelected {
             addArrow(posititon: step.position)
         } else {
             unselectedArrow(posititon: step.position, isReady: step.viewController.stepIsReady)
         }
+        
+        handleIcon()
+    }
+    
+    func didChangedSelection(isSelected: Bool) {
+        handleSelection(isSelected: isSelected)
     }
     
     override var isSelected: Bool {
         didSet {
-            let isReady = step?.viewController.stepIsReady ?? false
-            if isSelected {
-                addArrow(posititon: step?.position ?? .middle)
-            } else {
-                unselectedArrow(posititon: step!.position, isReady: isReady)
-            }
+//            handleSelection()
+        }
+    }
+    
+    private func handleSelection(isSelected: Bool) {
+        guard let step = step else {
+            return
+        }
+        
+        let isReady = step.viewController.stepIsReady
+        
+        let endPath: UIBezierPath
+        
+        if isSelected {
+            endPath = UIBezierPath.stepPath(position: step.position, width: step.stepLabelWidth.value, height: bounds.height, midY: bounds.midY)
+           arrowLayer.fillColor = Constants.selectedColor.cgColor
+        } else {
+            endPath = UIBezierPath.stepPath(position: step.position, width: step.stepLabelWidth.minimum, height: bounds.height, midY: bounds.midY)
+            arrowLayer.fillColor = (isReady ? Constants.completedColor : Constants.incompletedColor).cgColor
+        }
+        
+        arrowLayer.removeAllAnimations()
+        CATransaction.begin()
+        let pathAnimation = CABasicAnimation(keyPath: "path")
+        pathAnimation.toValue = endPath.cgPath
+        pathAnimation.beginTime = CACurrentMediaTime() + Constants.animationTimeOffset
+//        pathAnimation.duration = 0.5 // UIView.inheritedAnimationDuration
+        pathAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+        pathAnimation.autoreverses = false
+        pathAnimation.isRemovedOnCompletion = false
+        CATransaction.setCompletionBlock {
+            self.arrowLayer.path = endPath.cgPath
+        }
+        arrowLayer.add(pathAnimation, forKey: "pathAnimation")
+        CATransaction.commit()
+        handleIcon()
+    }
+    
+    private func handleIcon() {
+        if step?.viewController.stepIsReady == true {
+            titleButton.setImage(.strokedCheckmark, for: .normal)
+        } else {
+            titleButton.setImage(step?.image, for: .normal)
         }
     }
     

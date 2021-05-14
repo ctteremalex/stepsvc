@@ -18,29 +18,28 @@
                     <rect key="frame" x="0.0" y="0.0" width="228" height="235"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No property" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NV0-kg-GpR">
-                    <rect key="frame" x="4" y="0.0" width="220" height="235"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MCy-vN-sNx">
+                    <rect key="frame" x="0.0" y="8" width="228" height="219"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <state key="normal" title="Button"/>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="NV0-kg-GpR" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3xh-H0-LtA"/>
-                <constraint firstItem="i88-kM-7hw" firstAttribute="trailing" secondItem="NV0-kg-GpR" secondAttribute="trailing" constant="4" id="MfS-2n-ulm"/>
-                <constraint firstAttribute="bottom" secondItem="NV0-kg-GpR" secondAttribute="bottom" id="ONF-8r-oBo"/>
+                <constraint firstItem="MCy-vN-sNx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="God-qH-Gsa"/>
                 <constraint firstItem="i88-kM-7hw" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Rzg-qO-ZL4"/>
-                <constraint firstItem="NV0-kg-GpR" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="4" id="STQ-xX-io1"/>
                 <constraint firstItem="i88-kM-7hw" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="U4n-tT-WsK"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="MCy-vN-sNx" secondAttribute="bottom" constant="8" id="d1O-Of-CNJ"/>
                 <constraint firstAttribute="trailing" secondItem="i88-kM-7hw" secondAttribute="trailing" id="gBJ-IW-zkQ"/>
+                <constraint firstItem="MCy-vN-sNx" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="i1d-CZ-QrR"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="MCy-vN-sNx" secondAttribute="trailing" id="iHs-2G-k8E"/>
                 <constraint firstAttribute="bottom" secondItem="i88-kM-7hw" secondAttribute="bottom" id="on9-PL-30J"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="background" destination="i88-kM-7hw" id="II7-vZ-A19"/>
-                <outlet property="propertyLabel" destination="NV0-kg-GpR" id="8fB-X0-9rO"/>
+                <outlet property="titleButton" destination="MCy-vN-sNx" id="Kif-DO-HY6"/>
             </connections>
             <point key="canvasLocation" x="2.8985507246376816" y="-117.52232142857142"/>
         </view>

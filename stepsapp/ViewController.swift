@@ -49,7 +49,7 @@ class ViewController: UIViewController, CCStepsDataSource {
         let width: CCStep.Width = .init(minimum: 100, value: 100 * 2)
         
         let vc1 = StepViewController()
-        vc1.title = "VC1"
+        vc1.title = "VC111111"
         vc1.view.backgroundColor = .green
         stepsList.append(CCStep(position: .left, stepLabelWidth: width, viewController: vc1, canJumpToStep: canJumpTo))
 
@@ -78,6 +78,7 @@ class ViewController: UIViewController, CCStepsDataSource {
         vc6.view.backgroundColor = .cyan
         stepsList.append(CCStep(position: .right, stepLabelWidth: width, viewController: vc6, canJumpToStep: canJumpTo))
         
+        stepsList[0].image = .actions
         
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Next", style: .done, target: controller, action: #selector(controller.jumpToNext)),
@@ -105,9 +106,19 @@ class ViewController: UIViewController, CCStepsDataSource {
         ])
     }
     
+    /// Build own width's logic for cells
     private func updateCellSize(size: CGSize, rotating: Bool) {
         let count = numberOfSteps
-        let widthValue = (size.width - Constants.horizontalInset * 2) / (CGFloat(count) + 1)
+        
+        let orientation = UIDevice.current.orientation
+        let insets: CGFloat
+        if orientation.isLandscape {
+            insets = rotating ? view.safeAreaInsets.left + view.safeAreaInsets.right : 0
+        } else {
+            insets = 0
+        }
+        
+        let widthValue = (size.width - insets - Constants.horizontalInset * 2) / (CGFloat(count) + 1)
         let width = CCStep.Width(minimum: widthValue, value: widthValue * 2)
         
         (0..<count).forEach { step in
@@ -118,6 +129,7 @@ class ViewController: UIViewController, CCStepsDataSource {
             stepsController.configCollection { collection in
                 collection.reloadForCurrentIndex()
             }
+            
         }
     }
     
@@ -134,7 +146,18 @@ class ViewController: UIViewController, CCStepsDataSource {
     }
     
     func minimalStepWidthAtIndex(index: Int) -> CGFloat {
-        stepsList[index].stepLabelWidth.minimum
+//        let size = UIFont.systemFont(ofSize: 14)
+        let label = UILabel()
+        label.text = stepsList[index].viewController.title
+        label.sizeToFit()
+        let size = label.frame.size.width
+        let iconSize: CGFloat = stepsList[index].image == nil ? 0 : 22
+        if stepsList[index].stepLabelWidth.minimum < size {
+            stepsList[index].stepLabelWidth = .init(minimum: size + iconSize + 20, value: stepsList[index].stepLabelWidth.value)
+            return size + iconSize + 20
+        } else {
+            return stepsList[index].stepLabelWidth.minimum
+        }
     }
     
     func canJumpTo(step: Int) -> Bool {

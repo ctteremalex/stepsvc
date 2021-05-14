@@ -30,6 +30,7 @@ public struct CCStep {
     }
     
     public var position: Position
+    public var image: UIImage?
     public var stepLabelWidth: Width = .init(minimum: 0, value: 1)
     public var viewController: StepViewControllerDelegate
     
