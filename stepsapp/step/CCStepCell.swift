@@ -8,6 +8,11 @@
 import UIKit
 
 class CCStepCell: UICollectionViewCell {
+    enum Constants {
+        static let selectedColor: UIColor = .blue
+        static let incompletedColor: UIColor = .orange
+        static let completedColor: UIColor = .green
+    }
     
     private var step: CCStep?
     
@@ -15,10 +20,10 @@ class CCStepCell: UICollectionViewCell {
         let arrow = CAShapeLayer()
         arrow.strokeColor = UIColor.white.cgColor
         arrow.lineWidth = 4
-        layer.addSublayer(arrow)
+        layer.insertSublayer(arrow, at: 0)
         return arrow
     }()
-        
+    
     @IBOutlet private var propertyLabel: UILabel!
     @IBOutlet private var background: UIView!
     
@@ -28,19 +33,11 @@ class CCStepCell: UICollectionViewCell {
         
         background.backgroundColor = .clear
         selectedBackgroundView = background
+        backgroundColor = .clear
         
         propertyLabel.text = step.viewController.title
         propertyLabel.textColor = .white
-        switch step.position {
-        case .left:
-            propertyLabel.textAlignment = .left
-        case .middle:
-            propertyLabel.textAlignment = .center
-        case .right:
-            propertyLabel.textAlignment = .right
-        }
-        
-        backgroundColor = .clear
+        propertyLabel.textAlignment = .center
         
         if isSelected {
             addArrow(posititon: step.position)
@@ -68,14 +65,14 @@ class CCStepCell: UICollectionViewCell {
         let arrow = UIBezierPath.stepPath(position: posititon, width: width, height: bounds.height, midY: bounds.midY)
         
         arrowLayer.path = arrow.cgPath
-        arrowLayer.fillColor = UIColor.blue.cgColor
+        arrowLayer.fillColor = Constants.selectedColor.cgColor
     }
     
     private func unselectedArrow(posititon: CCStep.Position, isReady: Bool) {
         let arrow = UIBezierPath.stepPath(position: posititon, width: width, height: bounds.height, midY: bounds.midY)
         
         arrowLayer.path = arrow.cgPath
-        arrowLayer.fillColor = (isReady ? UIColor.green : UIColor.orange).cgColor
+        arrowLayer.fillColor = (isReady ? Constants.completedColor : Constants.incompletedColor).cgColor
     }
 }
 
