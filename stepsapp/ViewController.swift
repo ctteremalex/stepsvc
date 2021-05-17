@@ -30,7 +30,7 @@ class ViewController: UIViewController, CCStepsDataSource {
         
         cell.backgroundColor = .gray
         cell.config(step: stepsList[indexPath.row])
-        (cell as? SelectableCell)?.didChangedSelection(isSelected: cell.isSelected)
+        cell.didChangedSelection(isSelected: cell.isSelected)
         return cell
     }
     
