@@ -228,7 +228,7 @@ extension CCStepsBarView: UICollectionViewDelegate, UICollectionViewDelegateFlow
     }
     
     public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let item = collectionView.cellForItem(at: indexPath) as? CCStepCell
+        let item = collectionView.cellForItem(at: indexPath) as? SelectableCell
         item?.didChangedSelection(isSelected: false)
     }
     
