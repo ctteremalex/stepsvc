@@ -210,7 +210,10 @@ public class CCStepsBarView: UICollectionView {
     }
 }
 
-protocol SelectableCell {
+/// Steps cells have to conform that protocol
+public protocol SelectableStepCell {
+    /// Notify a cell that have changed its own selection state
+    /// - Parameter isSelected: selected state
     func didChangedSelection(isSelected: Bool)
 }
 
@@ -228,14 +231,14 @@ extension CCStepsBarView: UICollectionViewDelegate, UICollectionViewDelegateFlow
     }
     
     public func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let item = collectionView.cellForItem(at: indexPath) as? SelectableCell
+        let item = collectionView.cellForItem(at: indexPath) as? SelectableStepCell
         item?.didChangedSelection(isSelected: false)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         activateStepAtIndex(index: .selectFromCell(indexPath.item))
 //        collectionView.performBatchUpdates(nil, completion: nil)
-        let item = collectionView.cellForItem(at: indexPath) as? SelectableCell
+        let item = collectionView.cellForItem(at: indexPath) as? SelectableStepCell
         item?.didChangedSelection(isSelected: true)
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CCStepCell: UICollectionViewCell, SelectableCell {
+class CCStepCell: UICollectionViewCell, SelectableStepCell {
     enum Constants {
         static let selectedColor: UIColor = .blue
         static let incompletedColor: UIColor = .orange
