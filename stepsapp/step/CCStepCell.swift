@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CCStepCell: UICollectionViewCell {
+class CCStepCell: UICollectionViewCell, SelectableCell {
     enum Constants {
         static let selectedColor: UIColor = .blue
         static let incompletedColor: UIColor = .orange
@@ -58,7 +58,7 @@ class CCStepCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-//            handleSelection()
+            handleSelection(isSelected: isSelected)
         }
     }
     

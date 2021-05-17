@@ -21,9 +21,12 @@ public protocol CCStepsBarDataSource: UICollectionViewDataSource {
     /// - Parameter index: index of selected step for which we are looking for width
     func selectedStepWidthAtIndex(index: Int) -> CGFloat
     
-    /// checking the step status
+    /// Checking the step status
+    /// - Parameter step: step's index
     func canJumpTo(step: Int) -> Bool
     
+    /// Notify delegate the step was selected
+    /// - Parameter step: step's index
     func didSelected(step: Int)
 }
 
@@ -199,6 +202,16 @@ public class CCStepsBarView: UICollectionView {
         return true
     }
     
+    public override func invalidateIntrinsicContentSize() {
+        reloadSections([0])
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.initialSelectStep(index: self.currentStepIndex)
+        }
+    }
+}
+
+protocol SelectableCell {
+    func didChangedSelection(isSelected: Bool)
 }
 
 extension CCStepsBarView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -221,8 +234,8 @@ extension CCStepsBarView: UICollectionViewDelegate, UICollectionViewDelegateFlow
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         activateStepAtIndex(index: .selectFromCell(indexPath.item))
-        collectionView.performBatchUpdates(nil, completion: nil)
-        let item = collectionView.cellForItem(at: indexPath) as? CCStepCell
+//        collectionView.performBatchUpdates(nil, completion: nil)
+        let item = collectionView.cellForItem(at: indexPath) as? SelectableCell
         item?.didChangedSelection(isSelected: true)
     }
 }

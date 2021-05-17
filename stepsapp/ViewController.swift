@@ -30,6 +30,7 @@ class ViewController: UIViewController, CCStepsDataSource {
         
         cell.backgroundColor = .gray
         cell.config(step: stepsList[indexPath.row])
+        (cell as? SelectableCell)?.didChangedSelection(isSelected: cell.isSelected)
         return cell
     }
     
@@ -127,9 +128,9 @@ class ViewController: UIViewController, CCStepsDataSource {
         
         if rotating {
             stepsController.configCollection { collection in
-                collection.reloadForCurrentIndex()
+//                collection.reloadForCurrentIndex()
+                collection.invalidateIntrinsicContentSize()
             }
-            
         }
     }
     
