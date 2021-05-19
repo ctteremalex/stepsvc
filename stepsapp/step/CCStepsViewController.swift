@@ -8,7 +8,6 @@
 import UIKit
 
 public protocol CCStepsDataSource: CCStepsBarDataSource {
-    
     /// `CCStep` for index
     func stepAtIndex(index: Int) -> CCStep
     

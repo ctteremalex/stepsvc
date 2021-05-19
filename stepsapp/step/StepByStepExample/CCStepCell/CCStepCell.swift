@@ -13,6 +13,9 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
         static let incompletedColor: UIColor = .orange
         static let completedColor: UIColor = .green
         static let animationTimeOffset: TimeInterval = 0.1
+        static let lineWidth: CGFloat = 4
+        static let heightInset: CGFloat = 4
+        static let tailWidth: CGFloat = 10
     }
     
     private var step: CCStep?
@@ -20,7 +23,7 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
     private lazy var arrowLayer: CAShapeLayer = {
         let arrow = CAShapeLayer()
         arrow.strokeColor = UIColor.white.cgColor
-        arrow.lineWidth = 4
+        arrow.lineWidth = Constants.lineWidth
         arrow.backgroundColor = UIColor.black.cgColor
         layer.insertSublayer(arrow, at: 0)
         return arrow
@@ -70,12 +73,13 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
         let isReady = step.viewController.stepIsReady
         
         let endPath: UIBezierPath
+        let height = bounds.height - 2 * Constants.heightInset
         
         if isSelected {
-            endPath = UIBezierPath.stepPath(position: step.position, width: step.stepLabelWidth.value, height: bounds.height, midY: bounds.midY)
+            endPath = UIBezierPath.stepPath(position: step.position, width: step.stepLabelWidth.value, tailWidth: Constants.tailWidth, height: height, midY: bounds.midY)
            arrowLayer.fillColor = Constants.selectedColor.cgColor
         } else {
-            endPath = UIBezierPath.stepPath(position: step.position, width: step.stepLabelWidth.minimum, height: bounds.height, midY: bounds.midY)
+            endPath = UIBezierPath.stepPath(position: step.position, width: step.stepLabelWidth.minimum, tailWidth: Constants.tailWidth, height: height, midY: bounds.midY)
             arrowLayer.fillColor = (isReady ? Constants.completedColor : Constants.incompletedColor).cgColor
         }
         
@@ -84,7 +88,6 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
         let pathAnimation = CABasicAnimation(keyPath: "path")
         pathAnimation.toValue = endPath.cgPath
         pathAnimation.beginTime = CACurrentMediaTime() + Constants.animationTimeOffset
-//        pathAnimation.duration = 0.5 // UIView.inheritedAnimationDuration
         pathAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         pathAnimation.autoreverses = false
         pathAnimation.isRemovedOnCompletion = false
@@ -113,14 +116,16 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
     }
     
     private func addArrow(posititon: CCStep.Position) {
-        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: bounds.height, midY: bounds.midY)
+        let height = bounds.height - 2 * Constants.heightInset
+        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, tailWidth: Constants.tailWidth, height: height, midY: bounds.midY)
         
         arrowLayer.path = arrow.cgPath
         arrowLayer.fillColor = Constants.selectedColor.cgColor
     }
     
     private func unselectedArrow(posititon: CCStep.Position, isReady: Bool) {
-        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: bounds.height, midY: bounds.midY)
+        let height = bounds.height - 2 * Constants.heightInset
+        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, tailWidth: Constants.tailWidth, height: height, midY: bounds.midY)
         
         arrowLayer.path = arrow.cgPath
         arrowLayer.fillColor = (isReady ? Constants.completedColor : Constants.incompletedColor).cgColor
@@ -128,14 +133,14 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
 }
 
 private extension UIBezierPath {
-    static func stepPath(position: CCStep.Position, width: CGFloat, height: CGFloat, midY: CGFloat) -> UIBezierPath {
+    static func stepPath(position: CCStep.Position, width: CGFloat, tailWidth: CGFloat, height: CGFloat, midY: CGFloat) -> UIBezierPath {
         switch position {
         case .left:
-            return .leftSideArrow(from: CGPoint(x: 0, y: midY), to: CGPoint(x: width, y: midY), tailWidth: 10, headWidth: height - 8)
+            return .leftSideArrow(from: CGPoint(x: 0, y: midY), to: CGPoint(x: width, y: midY), tailWidth: tailWidth, headWidth: height)
         case .right:
-            return .rightSideArrow(from: CGPoint(x: 0, y: midY), to: CGPoint(x: width, y: midY), tailWidth: 10, headWidth: height - 8)
+            return .rightSideArrow(from: CGPoint(x: 0, y: midY), to: CGPoint(x: width, y: midY), tailWidth: tailWidth, headWidth: height)
         default:
-            return .arrowLTR(from: CGPoint(x: 0, y: midY), to: CGPoint(x: width, y: midY), tailWidth: 10, headWidth: height - 8)
+            return .arrowLTR(from: CGPoint(x: 0, y: midY), to: CGPoint(x: width, y: midY), tailWidth: tailWidth, headWidth: height)
         }
     }
     
@@ -146,7 +151,7 @@ private extension UIBezierPath {
         let points: [CGPoint] = [
             CGPoint(x: 0, y: -headWidth / 2), // left upper angle
             CGPoint(x: tailWidth, y: 0), // left inner tail
-            CGPoint(x: 0, y: headWidth / 2), // left bottom angle
+            CGPoint(x: 0, y: headWidth / 2) // left bottom angle
         ]
         
         let subPath = CGMutablePath()

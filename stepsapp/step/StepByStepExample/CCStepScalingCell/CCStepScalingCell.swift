@@ -13,6 +13,10 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         static let incompletedColor: UIColor = .orange
         static let completedColor: UIColor = .green
         static let deltaWidth: CGFloat = 16
+        static let lineWidth: CGFloat = 4
+        static let heightInset: CGFloat = 4
+        static let tailWidth: CGFloat = 10
+        static let beginScale: CGFloat = 1
     }
     
     private var step: CCStep?
@@ -20,7 +24,7 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
     private lazy var arrowLayer: CAShapeLayer = {
         let arrow = CAShapeLayer()
         arrow.strokeColor = UIColor.white.cgColor
-        arrow.lineWidth = 4
+        arrow.lineWidth = Constants.lineWidth
         arrow.backgroundColor = UIColor.black.cgColor
         arrow.position = .init(x: arrow.position.x, y: center.y)
         layer.insertSublayer(arrow, at: 0)
@@ -76,12 +80,12 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         let ratio: CGFloat = (cellWidth + Constants.deltaWidth) / cellWidth
         
         if isSelected {
-            beginScale = 1
+            beginScale = Constants.beginScale
             endScale = ratio
            arrowLayer.fillColor = Constants.selectedColor.cgColor
         } else {
             beginScale = ratio
-            endScale = 1
+            endScale = Constants.beginScale
             arrowLayer.fillColor = (isReady ? Constants.completedColor : Constants.incompletedColor).cgColor
         }
         
@@ -129,14 +133,16 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
     }
     
     private func addArrow(posititon: CCStep.Position) {
-        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: bounds.height, midY: bounds.midY)
+        let height = bounds.height - 2 * Constants.heightInset
+        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: height, tailWidth: Constants.tailWidth, midY: bounds.midY)
         
         arrowLayer.path = arrow.cgPath
         arrowLayer.fillColor = Constants.selectedColor.cgColor
     }
     
     private func unselectedArrow(posititon: CCStep.Position, isReady: Bool) {
-        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: bounds.height, midY: bounds.midY)
+        let height = bounds.height - 2 * Constants.heightInset
+        let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: height, tailWidth: Constants.tailWidth, midY: bounds.midY)
         
         arrowLayer.path = arrow.cgPath
         arrowLayer.fillColor = (isReady ? Constants.completedColor : Constants.incompletedColor).cgColor
@@ -144,14 +150,14 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
 }
 
 private extension UIBezierPath {
-    static func stepPath(position: CCStep.Position, width: CGFloat, height: CGFloat, midY: CGFloat) -> UIBezierPath {
+    static func stepPath(position: CCStep.Position, width: CGFloat, height: CGFloat, tailWidth: CGFloat, midY: CGFloat) -> UIBezierPath {
         switch position {
         case .left:
-            return .leftSideArrow(from: .zero, to: CGPoint(x: width, y: 0), tailWidth: 10, headWidth: height - 8)
+            return .leftSideArrow(from: .zero, to: CGPoint(x: width, y: 0), tailWidth: tailWidth, headWidth: height)
         case .right:
-            return .rightSideArrow(from: .zero, to: CGPoint(x: width, y: 0), tailWidth: 10, headWidth: height - 8)
+            return .rightSideArrow(from: .zero, to: CGPoint(x: width, y: 0), tailWidth: tailWidth, headWidth: height)
         default:
-            return .arrowLTR(from: .zero, to: CGPoint(x: width, y: 0), tailWidth: 10, headWidth: height - 8)
+            return .arrowLTR(from: .zero, to: CGPoint(x: width, y: 0), tailWidth: tailWidth, headWidth: height)
         }
     }
     
@@ -162,7 +168,7 @@ private extension UIBezierPath {
         let points: [CGPoint] = [
             CGPoint(x: 0, y: 0), // left upper angle
             CGPoint(x: tailWidth, y: headWidth / 2), // left inner tail
-            CGPoint(x: 0, y: headWidth), // left bottom angle
+            CGPoint(x: 0, y: headWidth) // left bottom angle
         ]
         
         let subPath = CGMutablePath()

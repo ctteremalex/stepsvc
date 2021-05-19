@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StepViewController: UIViewController, StepContentView {
+final class StepViewController: UIViewController, StepContentView {
     var stepTitle: String? {
         title
     }
@@ -22,7 +22,7 @@ class StepViewController: UIViewController, StepContentView {
         view.addSubview(switcher)
         NSLayoutConstraint.activate([
             switcher.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            switcher.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            switcher.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
         switcher.addTarget(self, action: #selector(didChanged(on:)), for: .valueChanged)
@@ -47,6 +47,5 @@ class StepViewController: UIViewController, StepContentView {
             self.view.backgroundColor = currentColor
             self.view.layoutIfNeeded()
         }
-
     }
 }
