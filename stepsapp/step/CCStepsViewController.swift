@@ -96,7 +96,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
             stepsView.topAnchor.constraint(equalTo: stepsbar.bottomAnchor),
             stepsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             stepsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stepsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stepsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
                 
         stepsbar.reloadAllData(initial: 1)
@@ -121,14 +121,19 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     }
     
     private func showStepViewController(step: CCStep) {
-        addChild(step.viewController)
-        stepsView.addSubview(step.viewController.view)
-        step.viewController.view.translatesAutoresizingMaskIntoConstraints = false
+        guard let controller = step.viewController.asController else {
+            debugPrint("No controller in step.viewController")
+            return
+        }
+        
+        addChild(controller)
+        stepsView.addSubview(controller.view)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            step.viewController.view.topAnchor.constraint(equalTo: stepsView.topAnchor),
-            step.viewController.view.bottomAnchor.constraint(equalTo: stepsView.bottomAnchor),
-            step.viewController.view.leadingAnchor.constraint(equalTo: stepsView.leadingAnchor),
-            step.viewController.view.trailingAnchor.constraint(equalTo: stepsView.trailingAnchor),
+            controller.view.topAnchor.constraint(equalTo: stepsView.topAnchor),
+            controller.view.bottomAnchor.constraint(equalTo: stepsView.bottomAnchor),
+            controller.view.leadingAnchor.constraint(equalTo: stepsView.leadingAnchor),
+            controller.view.trailingAnchor.constraint(equalTo: stepsView.trailingAnchor)
         ])
     }
 }

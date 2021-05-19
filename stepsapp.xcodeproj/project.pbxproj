@@ -7,25 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		412E01EF2644216E00338EC9 /* CCStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412E01EE2644216E00338EC9 /* CCStepCell.swift */; };
-		412E01F1264421E600338EC9 /* CCStepCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 412E01F0264421E600338EC9 /* CCStepCell.xib */; };
-		41F7ADCC2641324B00EBE90C /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F7ADCB2641324B00EBE90C /* StepViewController.swift */; };
+		41A4ECD52652C5740070E3D7 /* StepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A4ECD02652C5740070E3D7 /* StepViewController.swift */; };
+		41A4ECD62652C5740070E3D7 /* CCStepCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41A4ECD22652C5740070E3D7 /* CCStepCell.xib */; };
+		41A4ECD72652C5740070E3D7 /* CCStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A4ECD32652C5740070E3D7 /* CCStepCell.swift */; };
+		41A4ECD82652C5740070E3D7 /* StepContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A4ECD42652C5740070E3D7 /* StepContentViewController.swift */; };
+		41A4ECDC2653AC0A0070E3D7 /* CCStepScalingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A4ECDA2653AC0A0070E3D7 /* CCStepScalingCell.swift */; };
+		41A4ECDD2653AC0A0070E3D7 /* CCStepScalingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41A4ECDB2653AC0A0070E3D7 /* CCStepScalingCell.xib */; };
 		41F7AE412644020900EBE90C /* CCStepsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F7AE402644020800EBE90C /* CCStepsViewController.swift */; };
 		E36A5B3D263AC49A007A2B9B /* CCStepsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */; };
 		E36A5B40263AE658007A2B9B /* CCStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36A5B3F263AE658007A2B9B /* CCStep.swift */; };
 		E36A5B48263BD59C007A2B9B /* CCStepsBarContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36A5B47263BD59C007A2B9B /* CCStepsBarContainerView.swift */; };
 		E397938C2639AE5600009DFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E397938B2639AE5600009DFC /* AppDelegate.swift */; };
 		E397938E2639AE5600009DFC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E397938D2639AE5600009DFC /* SceneDelegate.swift */; };
-		E39793902639AE5600009DFC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E397938F2639AE5600009DFC /* ViewController.swift */; };
 		E39793932639AE5600009DFC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E39793912639AE5600009DFC /* Main.storyboard */; };
 		E39793952639AE5800009DFC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E39793942639AE5800009DFC /* Assets.xcassets */; };
 		E39793982639AE5800009DFC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E39793962639AE5800009DFC /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		412E01EE2644216E00338EC9 /* CCStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStepCell.swift; sourceTree = "<group>"; };
-		412E01F0264421E600338EC9 /* CCStepCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCStepCell.xib; sourceTree = "<group>"; };
-		41F7ADCB2641324B00EBE90C /* StepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
+		41A4ECD02652C5740070E3D7 /* StepViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepViewController.swift; sourceTree = "<group>"; };
+		41A4ECD22652C5740070E3D7 /* CCStepCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCStepCell.xib; sourceTree = "<group>"; };
+		41A4ECD32652C5740070E3D7 /* CCStepCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCStepCell.swift; sourceTree = "<group>"; };
+		41A4ECD42652C5740070E3D7 /* StepContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepContentViewController.swift; sourceTree = "<group>"; };
+		41A4ECDA2653AC0A0070E3D7 /* CCStepScalingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCStepScalingCell.swift; sourceTree = "<group>"; };
+		41A4ECDB2653AC0A0070E3D7 /* CCStepScalingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CCStepScalingCell.xib; sourceTree = "<group>"; };
 		41F7AE402644020800EBE90C /* CCStepsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CCStepsViewController.swift; sourceTree = "<group>"; };
 		E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStepsBarView.swift; sourceTree = "<group>"; };
 		E36A5B3F263AE658007A2B9B /* CCStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CCStep.swift; sourceTree = "<group>"; };
@@ -33,7 +38,6 @@
 		E39793882639AE5600009DFC /* stepsapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stepsapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E397938B2639AE5600009DFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E397938D2639AE5600009DFC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E397938F2639AE5600009DFC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E39793922639AE5600009DFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E39793942639AE5800009DFC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E39793972639AE5800009DFC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -51,6 +55,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		41A4ECCF2652C5740070E3D7 /* StepByStepExample */ = {
+			isa = PBXGroup;
+			children = (
+				41A4ECD12652C5740070E3D7 /* CCStepCell */,
+				41A4ECD92653AC0A0070E3D7 /* CCStepScalingCell */,
+				41A4ECD02652C5740070E3D7 /* StepViewController.swift */,
+				41A4ECD42652C5740070E3D7 /* StepContentViewController.swift */,
+			);
+			path = StepByStepExample;
+			sourceTree = "<group>";
+		};
+		41A4ECD12652C5740070E3D7 /* CCStepCell */ = {
+			isa = PBXGroup;
+			children = (
+				41A4ECD22652C5740070E3D7 /* CCStepCell.xib */,
+				41A4ECD32652C5740070E3D7 /* CCStepCell.swift */,
+			);
+			path = CCStepCell;
+			sourceTree = "<group>";
+		};
+		41A4ECD92653AC0A0070E3D7 /* CCStepScalingCell */ = {
+			isa = PBXGroup;
+			children = (
+				41A4ECDA2653AC0A0070E3D7 /* CCStepScalingCell.swift */,
+				41A4ECDB2653AC0A0070E3D7 /* CCStepScalingCell.xib */,
+			);
+			path = CCStepScalingCell;
+			sourceTree = "<group>";
+		};
 		E397937F2639AE5600009DFC = {
 			isa = PBXGroup;
 			children = (
@@ -73,8 +106,6 @@
 				E39793A02639AEB300009DFC /* step */,
 				E397938B2639AE5600009DFC /* AppDelegate.swift */,
 				E397938D2639AE5600009DFC /* SceneDelegate.swift */,
-				E397938F2639AE5600009DFC /* ViewController.swift */,
-				41F7ADCB2641324B00EBE90C /* StepViewController.swift */,
 				E39793912639AE5600009DFC /* Main.storyboard */,
 				E39793942639AE5800009DFC /* Assets.xcassets */,
 				E39793962639AE5800009DFC /* LaunchScreen.storyboard */,
@@ -86,12 +117,11 @@
 		E39793A02639AEB300009DFC /* step */ = {
 			isa = PBXGroup;
 			children = (
-				412E01EE2644216E00338EC9 /* CCStepCell.swift */,
-				412E01F0264421E600338EC9 /* CCStepCell.xib */,
 				E36A5B3C263AC49A007A2B9B /* CCStepsBarView.swift */,
 				41F7AE402644020800EBE90C /* CCStepsViewController.swift */,
 				E36A5B47263BD59C007A2B9B /* CCStepsBarContainerView.swift */,
 				E36A5B3F263AE658007A2B9B /* CCStep.swift */,
+				41A4ECCF2652C5740070E3D7 /* StepByStepExample */,
 			);
 			path = step;
 			sourceTree = "<group>";
@@ -153,9 +183,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				412E01F1264421E600338EC9 /* CCStepCell.xib in Resources */,
 				E39793982639AE5800009DFC /* LaunchScreen.storyboard in Resources */,
+				41A4ECD62652C5740070E3D7 /* CCStepCell.xib in Resources */,
 				E39793952639AE5800009DFC /* Assets.xcassets in Resources */,
+				41A4ECDD2653AC0A0070E3D7 /* CCStepScalingCell.xib in Resources */,
 				E39793932639AE5600009DFC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -168,14 +199,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				E36A5B48263BD59C007A2B9B /* CCStepsBarContainerView.swift in Sources */,
-				E39793902639AE5600009DFC /* ViewController.swift in Sources */,
 				E397938C2639AE5600009DFC /* AppDelegate.swift in Sources */,
 				E36A5B40263AE658007A2B9B /* CCStep.swift in Sources */,
+				41A4ECD82652C5740070E3D7 /* StepContentViewController.swift in Sources */,
 				E36A5B3D263AC49A007A2B9B /* CCStepsBarView.swift in Sources */,
-				412E01EF2644216E00338EC9 /* CCStepCell.swift in Sources */,
+				41A4ECD72652C5740070E3D7 /* CCStepCell.swift in Sources */,
 				E397938E2639AE5600009DFC /* SceneDelegate.swift in Sources */,
 				41F7AE412644020900EBE90C /* CCStepsViewController.swift in Sources */,
-				41F7ADCC2641324B00EBE90C /* StepViewController.swift in Sources */,
+				41A4ECDC2653AC0A0070E3D7 /* CCStepScalingCell.swift in Sources */,
+				41A4ECD52652C5740070E3D7 /* StepViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

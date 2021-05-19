@@ -7,7 +7,11 @@
 
 import UIKit
 
-class StepViewController: UIViewController, StepViewControllerDelegate {
+class StepViewController: UIViewController, StepContentView {
+    var stepTitle: String? {
+        title
+    }
+    
     var stepIsReady: Bool = false
     
     /// custom logic-UI to handle form in view ccontroller

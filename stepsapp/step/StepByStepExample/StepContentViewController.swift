@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, CCStepsDataSource {
+class StepContentViewController: UIViewController, CCStepsDataSource {
     private enum Constants {
         static let stepCellId: String = "step"
         static let horizontalInset: CGFloat = 8
@@ -17,7 +17,7 @@ class ViewController: UIViewController, CCStepsDataSource {
     
     func didSelected(step: Int) {
         currentIndex = step
-        print("selected step is \(step)")
+        debugPrint("selected step is \(step)")
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -26,7 +26,7 @@ class ViewController: UIViewController, CCStepsDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.stepCellId, for: indexPath) as! CCStepCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.stepCellId, for: indexPath) as! CCStepScalingCell
         
         cell.backgroundColor = .gray
         cell.config(step: stepsList[indexPath.row])
@@ -47,10 +47,10 @@ class ViewController: UIViewController, CCStepsDataSource {
         let controller = CCStepsViewController(stepsDataSource: self)
         stepsController = controller
         
-        let width: CCStep.Width = .init(minimum: 100, value: 100 * 2)
+        let width: CCStep.Width = .init(minimum: 100, value: 100)
         
         let vc1 = StepViewController()
-        vc1.title = "VC111111"
+        vc1.title = "VC1"
         vc1.view.backgroundColor = .green
         stepsList.append(CCStep(position: .left, stepLabelWidth: width, viewController: vc1, canJumpToStep: canJumpTo))
 
@@ -79,7 +79,11 @@ class ViewController: UIViewController, CCStepsDataSource {
         vc6.view.backgroundColor = .cyan
         stepsList.append(CCStep(position: .right, stepLabelWidth: width, viewController: vc6, canJumpToStep: canJumpTo))
         
-        stepsList[0].image = .actions
+        if #available(iOS 13.0, *) {
+            stepsList[0].image = .actions
+        } else {
+            // Fallback on earlier versions
+        }
         
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Next", style: .done, target: controller, action: #selector(controller.jumpToNext)),
@@ -87,7 +91,7 @@ class ViewController: UIViewController, CCStepsDataSource {
         ]
         
         controller.configCollection { collection in
-            let stepNib = UINib(nibName: "CCStepCell", bundle: nil)
+            let stepNib = UINib(nibName: "CCStepScalingCell", bundle: nil)
             collection.register(stepNib, forCellWithReuseIdentifier: Constants.stepCellId)
             collection.contentInset = .init(top: 0, left: Constants.horizontalInset, bottom: 0, right: Constants.horizontalInset)
         }
@@ -119,8 +123,8 @@ class ViewController: UIViewController, CCStepsDataSource {
             insets = 0
         }
         
-        let widthValue = (size.width - insets - Constants.horizontalInset * 2) / (CGFloat(count) + 1)
-        let width = CCStep.Width(minimum: widthValue, value: widthValue * 2)
+        let widthValue = (size.width - insets - Constants.horizontalInset * 2) / (CGFloat(count))
+        let width = CCStep.Width(minimum: widthValue, value: widthValue)
         
         (0..<count).forEach { step in
             stepsList[step].stepLabelWidth = width
@@ -147,9 +151,8 @@ class ViewController: UIViewController, CCStepsDataSource {
     }
     
     func minimalStepWidthAtIndex(index: Int) -> CGFloat {
-//        let size = UIFont.systemFont(ofSize: 14)
         let label = UILabel()
-        label.text = stepsList[index].viewController.title
+        label.text = stepsList[index].viewController.stepTitle
         label.sizeToFit()
         let size = label.frame.size.width
         let iconSize: CGFloat = stepsList[index].image == nil ? 0 : 22

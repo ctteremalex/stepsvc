@@ -54,9 +54,13 @@ public protocol CCStepsBarDelegate: AnyObject {
 /// Stepsbar showing all the steps which user can choose
 public class CCStepsBarView: UICollectionView {
     
+    /// Cell selection separation
     private enum JumpType {
-        case selectFromCell(Int)
+        /// Select the step by index when reload steps (initialization or rotation)
         case initialValue(Int)
+        /// Tap the step tile (cell)
+        case selectFromCell(Int)
+        /// Check a readiness of the current step and go to the step
         case jumpTo(step: Int)
         
         var index: Int {
@@ -204,6 +208,7 @@ public class CCStepsBarView: UICollectionView {
     
     public override func invalidateIntrinsicContentSize() {
         reloadSections([0])
+        // Explanation: some cell animations break without DispatchQueue.main.asyncAfter
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.initialSelectStep(index: self.currentStepIndex)
         }
