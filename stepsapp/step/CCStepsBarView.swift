@@ -99,6 +99,7 @@ public class CCStepsBarView: UICollectionView {
         showsHorizontalScrollIndicator = false
 
         currentStepIndex = initial
+        reloadForCurrentIndex()
     }
     
     /// Reload data and select the current index

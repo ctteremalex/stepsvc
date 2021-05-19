@@ -16,6 +16,10 @@ public protocol CCStepsDataSource: CCStepsBarDataSource {
 
 public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     
+    private enum Constants {
+        static let initialIndex: Int = 1
+    }
+    
     /// Attach this function as Selector method to jump to next step
     @IBAction public func jumpToNext() {
         stepsbar.jumpToNextStep()
@@ -100,8 +104,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
             stepsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
                 
-        stepsbar.reloadAllData(initial: 1)
-        stepsbar.initialSelectStep(index: 1)
+        stepsbar.reloadAllData(initial: Constants.initialIndex)
     }
 
     public func stepSelected(index: Int) {
