@@ -12,7 +12,7 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         static let selectedColor: UIColor = .blue
         static let incompletedColor: UIColor = .orange
         static let completedColor: UIColor = .green
-        static let animationTimeOffset: TimeInterval = 0.1
+        static let deltaWidth: CGFloat = 16
     }
     
     private var step: CCStep?
@@ -73,12 +73,14 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         let beginScale: CGFloat
         let endScale: CGFloat
         
+        let ratio: CGFloat = (cellWidth + Constants.deltaWidth) / cellWidth
+        
         if isSelected {
             beginScale = 1
-            endScale = 1.1
+            endScale = ratio
            arrowLayer.fillColor = Constants.selectedColor.cgColor
         } else {
-            beginScale = 1.1
+            beginScale = ratio
             endScale = 1
             arrowLayer.fillColor = (isReady ? Constants.completedColor : Constants.incompletedColor).cgColor
         }
@@ -86,8 +88,8 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         arrowLayer.removeAllAnimations()
         
         let transAnimation = CABasicAnimation(keyPath: "transform.translation.x")
-        transAnimation.fromValue = isSelected ? 0 : -8
-        transAnimation.toValue = isSelected ? -8 : 0
+        transAnimation.fromValue = isSelected ? 0 : -Constants.deltaWidth / 2
+        transAnimation.toValue = isSelected ? -Constants.deltaWidth / 2 : 0
         transAnimation.isCumulative = true
         transAnimation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         
@@ -103,7 +105,7 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         group.isRemovedOnCompletion = false
         group.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
         
-        let transform: CGAffineTransform = .init(translationX: isSelected ? -8: 0, y: 0)
+        let transform: CGAffineTransform = .init(translationX: isSelected ? -Constants.deltaWidth / 2 : 0, y: 0)
         arrowLayer.setAffineTransform(transform.scaledBy(x: endScale, y: endScale))
         arrowLayer.add(group, forKey: "transScale")
         
@@ -223,7 +225,7 @@ private extension UIBezierPath {
 
         let cosine = (end.x - start.x) / length
         let sine = (end.y - start.y) / length
-        let transform = CGAffineTransform(a: cosine, b: sine, c: -sine, d: cosine, tx: start.x, ty: -headWidth/2)
+        let transform = CGAffineTransform(a: cosine, b: sine, c: -sine, d: cosine, tx: start.x, ty: -headWidth / 2)
 
         let path = CGMutablePath()
         path.addLines(between: points, transform: transform)

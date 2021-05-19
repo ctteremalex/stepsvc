@@ -52,6 +52,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
         return layout
     }()
     
