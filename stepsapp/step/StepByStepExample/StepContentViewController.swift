@@ -131,9 +131,7 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
         }
         
         if rotating {
-            stepsController.configCollection { collection in
-                collection.invalidateIntrinsicContentSize()
-            }
+            stepsController.invalidateIntrinsicContentSize()
         }
     }
     

@@ -86,6 +86,11 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         callback(stepsbar)
     }
     
+    /// Invalidates content size, calculates new widths, lays out step cell sizes
+    public func invalidateIntrinsicContentSize() {
+        stepsbar.invalidateIntrinsicContentSize()
+    }
+    
     private func createLayout() {
         stepsView.translatesAutoresizingMaskIntoConstraints = false
         stepsbar.translatesAutoresizingMaskIntoConstraints = false
