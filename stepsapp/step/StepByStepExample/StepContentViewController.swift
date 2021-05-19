@@ -132,14 +132,15 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
         
         if rotating {
             stepsController.configCollection { collection in
-//                collection.reloadForCurrentIndex()
                 collection.invalidateIntrinsicContentSize()
             }
         }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        updateCellSize(size: size, rotating: true)
+        coordinator.animate(alongsideTransition: {[weak self] _ in
+            self?.updateCellSize(size: size, rotating: true)
+        })
     }
     
     var numberOfSteps: Int {

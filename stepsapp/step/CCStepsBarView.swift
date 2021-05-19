@@ -213,10 +213,7 @@ public class CCStepsBarView: UICollectionView {
     
     public override func invalidateIntrinsicContentSize() {
         reloadSections([0])
-        // Explanation: some cell animations break without DispatchQueue.main.asyncAfter
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.initialSelectStep(index: self.currentStepIndex)
-        }
+        initialSelectStep(index: currentStepIndex)
     }
 }
 
