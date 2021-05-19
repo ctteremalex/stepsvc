@@ -57,10 +57,15 @@ public class CCStepsBarView: UICollectionView {
     /// Cell selection separation
     private enum JumpType {
         /// Select the step by index when reload steps (initialization or rotation)
+        /// - Parameter Int: iniitial select step
         case initialValue(Int)
+        
         /// Tap the step tile (cell)
+        /// - Parameter Int: Select step
         case selectFromCell(Int)
+        
         /// Check a readiness of the current step and go to the step
+        /// - Parameter step: Check and select step
         case jumpTo(step: Int)
         
         var index: Int {
