@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class StepViewController: UIViewController {
     var stepTitle: String? {
@@ -18,12 +19,12 @@ final class StepViewController: UIViewController {
     lazy var checkSwitch: UISwitch = {
         let switcher = UISwitch(frame: .init(origin: .zero, size: .init(width: 100, height: 100)))
         
-        switcher.translatesAutoresizingMaskIntoConstraints = false
+        
         view.addSubview(switcher)
-        NSLayoutConstraint.activate([
-            switcher.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            switcher.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+        
+        switcher.snp.makeConstraints { maker in
+            maker.center.equalTo(view)
+        }
         
         switcher.addTarget(self, action: #selector(didChanged(on:)), for: .valueChanged)
         return switcher

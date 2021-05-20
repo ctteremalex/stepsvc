@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class StepContentViewController: UIViewController, CCStepsDataSource {
     private enum Constants {
@@ -119,16 +120,12 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
         updateCellSize(size: view.frame.size, rotating: false)
         
         /// this line can load view of CCStepsViewController, so call updateCellSize before here
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        
         addChild(controller)
         view.addSubview(controller.view)
-        NSLayoutConstraint.activate([
-            controller.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            controller.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            controller.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            controller.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-        ])
+        
+        controller.view.snp.makeConstraints { maker in
+            maker.edges.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     
     /// Build own width's logic for cells

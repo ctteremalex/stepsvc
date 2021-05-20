@@ -25,6 +25,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     
     private enum Constants {
         static let initialIndex: Int = 1
+        static let stepBarHeight: CGFloat = 44
     }
     
     /// Attach this function as Selector method to jump to next step
@@ -54,8 +55,6 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     public func showIncompletionError(step: Int) {
         dataSource?.showIncompleteError(step)
     }
-    
-    private let StepsbarHeight: CGFloat = 44
     
     private let stepsView = UIView()
     
@@ -99,23 +98,23 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     }
     
     private func createLayout() {
-        stepsView.translatesAutoresizingMaskIntoConstraints = false
-        stepsbar.translatesAutoresizingMaskIntoConstraints = false
-        
         view.addSubview(stepsView)
         view.addSubview(stepsbar)
-        NSLayoutConstraint.activate([
-            stepsbar.topAnchor.constraint(equalTo: view.topAnchor),
-            stepsbar.heightAnchor.constraint(equalToConstant: 44),
-            stepsbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stepsbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            stepsView.topAnchor.constraint(equalTo: stepsbar.bottomAnchor),
-            stepsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            stepsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stepsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-                
+        
+        stepsbar.snp.makeConstraints { maker in
+            maker.top.equalTo(view)
+            maker.height.equalTo(Constants.stepBarHeight)
+            maker.leading.equalTo(view)
+            maker.trailing.equalTo(view)
+        }
+        
+        stepsView.snp.makeConstraints { maker in
+            maker.top.equalTo(Constants.stepBarHeight)
+            maker.bottom.equalTo(view)
+            maker.leading.equalTo(view)
+            maker.trailing.equalTo(view)
+        }
+        
         stepsbar.reloadAllData(initial: Constants.initialIndex)
     }
 
@@ -141,12 +140,12 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
         
         addChild(controller)
         stepsView.addSubview(controller.view)
+        
+        // this line removes unexpected size constraints
         controller.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            controller.view.topAnchor.constraint(equalTo: stepsView.topAnchor),
-            controller.view.bottomAnchor.constraint(equalTo: stepsView.bottomAnchor),
-            controller.view.leadingAnchor.constraint(equalTo: stepsView.leadingAnchor),
-            controller.view.trailingAnchor.constraint(equalTo: stepsView.trailingAnchor)
-        ])
+        
+        stepsView.snp.makeConstraints { maker in
+            maker.edges.equalTo(controller.view)
+        }
     }
 }
