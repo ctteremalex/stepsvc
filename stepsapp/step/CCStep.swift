@@ -11,20 +11,20 @@ public typealias StepSelectionHandler = () -> Void
 
 /// Model of step for CCStepsViewController
 public struct CCStep {
-    public enum Position {
+    public enum CCStepPosition {
         case left
         case right
         case middle
     }
     
-    public struct Width {
+    public struct CCStepWidth {
         let minimum: CGFloat
         let value: CGFloat
     }
     
-    public var position: Position
+    public var position: CCStepPosition
     public var image: UIImage?
-    public var stepLabelWidth: Width = .init(minimum: 0, value: 1)
+    public var stepLabelWidth: CCStepWidth = .init(minimum: 0, value: 1)
     public var viewController: UIViewController
     
     public var canJumpToStep: ((_ index: Int) -> Bool)

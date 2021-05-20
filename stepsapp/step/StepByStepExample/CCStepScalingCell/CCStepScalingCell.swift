@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDelegate {
+class CCStepScalingCell: UICollectionViewCell, CCSelectableStepCell, CAAnimationDelegate {
     enum Constants {
         static let selectedColor: UIColor = .blue
         static let incompletedColor: UIColor = .orange
@@ -64,16 +64,16 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
     }
     
     func didChangedSelection(isSelected: Bool) {
-        handleSelection(isSelected: isSelected)
+        handleSelection(isSelected)
     }
     
     override var isSelected: Bool {
         didSet {
-            handleSelection(isSelected: isSelected)
+            handleSelection(isSelected)
         }
     }
     
-    private func handleSelection(isSelected: Bool) {
+    private func handleSelection(_ isSelected: Bool) {
         guard let isReady = viewModel?.stepIsReady else {
             return
         }
@@ -136,7 +136,7 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         (isSelected ? viewModel?.step.stepLabelWidth.value : viewModel?.step.stepLabelWidth.minimum) ?? bounds.width
     }
     
-    private func addArrow(posititon: CCStep.Position) {
+    private func addArrow(posititon: CCStep.CCStepPosition) {
         let height = bounds.height - 2 * Constants.heightInset
         let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: height, tailWidth: Constants.tailWidth, midY: bounds.midY)
         
@@ -144,7 +144,7 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         arrowLayer.fillColor = Constants.selectedColor.cgColor
     }
     
-    private func unselectedArrow(posititon: CCStep.Position, isReady: Bool) {
+    private func unselectedArrow(posititon: CCStep.CCStepPosition, isReady: Bool) {
         let height = bounds.height - 2 * Constants.heightInset
         let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, height: height, tailWidth: Constants.tailWidth, midY: bounds.midY)
         
@@ -154,7 +154,7 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
 }
 
 private extension UIBezierPath {
-    static func stepPath(position: CCStep.Position, width: CGFloat, height: CGFloat, tailWidth: CGFloat, midY: CGFloat) -> UIBezierPath {
+    static func stepPath(position: CCStep.CCStepPosition, width: CGFloat, height: CGFloat, tailWidth: CGFloat, midY: CGFloat) -> UIBezierPath {
         switch position {
         case .left:
             return .leftSideArrow(from: .zero, to: CGPoint(x: width, y: 0), tailWidth: tailWidth, headWidth: height)

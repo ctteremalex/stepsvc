@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CCStepCell: UICollectionViewCell, SelectableStepCell {
+class CCStepCell: UICollectionViewCell, CCSelectableStepCell {
     enum Constants {
         static let selectedColor: UIColor = .blue
         static let incompletedColor: UIColor = .orange
@@ -57,16 +57,16 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
     }
     
     func didChangedSelection(isSelected: Bool) {
-        handleSelection(isSelected: isSelected)
+        handleSelection(isSelected)
     }
     
     override var isSelected: Bool {
         didSet {
-            handleSelection(isSelected: isSelected)
+            handleSelection(isSelected)
         }
     }
     
-    private func handleSelection(isSelected: Bool) {
+    private func handleSelection(_ isSelected: Bool) {
         guard let step = step else {
             return
         }
@@ -116,7 +116,7 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
         (isSelected ? step?.stepLabelWidth.value : step?.stepLabelWidth.minimum) ?? bounds.width
     }
     
-    private func addArrow(posititon: CCStep.Position) {
+    private func addArrow(posititon: CCStep.CCStepPosition) {
         let height = bounds.height - 2 * Constants.heightInset
         let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, tailWidth: Constants.tailWidth, height: height, midY: bounds.midY)
         
@@ -124,7 +124,7 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
         arrowLayer.fillColor = Constants.selectedColor.cgColor
     }
     
-    private func unselectedArrow(posititon: CCStep.Position, isReady: Bool) {
+    private func unselectedArrow(posititon: CCStep.CCStepPosition, isReady: Bool) {
         let height = bounds.height - 2 * Constants.heightInset
         let arrow = UIBezierPath.stepPath(position: posititon, width: cellWidth, tailWidth: Constants.tailWidth, height: height, midY: bounds.midY)
         
@@ -134,7 +134,7 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
 }
 
 private extension UIBezierPath {
-    static func stepPath(position: CCStep.Position, width: CGFloat, tailWidth: CGFloat, height: CGFloat, midY: CGFloat) -> UIBezierPath {
+    static func stepPath(position: CCStep.CCStepPosition, width: CGFloat, tailWidth: CGFloat, height: CGFloat, midY: CGFloat) -> UIBezierPath {
         switch position {
         case .left:
             return .leftSideArrow(from: CGPoint(x: 0, y: midY), to: CGPoint(x: width, y: midY), tailWidth: tailWidth, headWidth: height)

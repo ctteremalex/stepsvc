@@ -38,14 +38,14 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     }
         
     public var allStepsCompleted: Bool {
-        guard let source = dataSource else {
+        guard let dataSource = dataSource else {
             return false
         }
         
         var completed = false
         
-        for index in 0..<source.numberOfSteps {
-            completed = completed && source.canJumpTo(step: index)
+        for index in 0..<dataSource.numberOfSteps {
+            completed = completed && dataSource.canJumpTo(step: index)
         }
         
         return completed
@@ -57,7 +57,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     
     private let StepsbarHeight: CGFloat = 44
     
-    private let stepsView = UIView(frame: .zero)
+    private let stepsView = UIView()
     
     private lazy var layout: UICollectionViewLayout = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()

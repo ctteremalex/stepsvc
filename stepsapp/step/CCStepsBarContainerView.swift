@@ -27,11 +27,7 @@ class CCStepsBarContainerView: UIView {
     
     @objc
     private func containerTapped() {
-        guard let tapBlock = tapBlock else {
-            return
-        }
-        
-        tapBlock()
+        tapBlock?()
     }
     
 }

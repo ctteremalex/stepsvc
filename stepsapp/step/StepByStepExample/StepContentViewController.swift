@@ -67,7 +67,7 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
         let controller = CCStepsViewController(stepsDataSource: self)
         stepsController = controller
         
-        let width: CCStep.Width = .init(minimum: 100, value: 100)
+        let width: CCStep.CCStepWidth = .init(minimum: 100, value: 100)
         
         let vc1 = StepViewController()
         vc1.title = "VC1"
@@ -144,7 +144,7 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
         }
         
         let widthValue = (size.width - insets - Constants.horizontalInset * 2) / (CGFloat(count))
-        let width = CCStep.Width(minimum: widthValue, value: widthValue)
+        let width = CCStep.CCStepWidth(minimum: widthValue, value: widthValue)
         
         (0..<count).forEach { step in
             stepsList[step].stepLabelWidth = width
