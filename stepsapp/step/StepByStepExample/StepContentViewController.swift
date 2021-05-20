@@ -15,6 +15,19 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
     
     private var currentIndex: Int = 0
     
+    func stepIsReadyAtIndex(_ index: Int) -> Bool {
+        (stepsList[currentIndex].viewController as? StepViewController)?.stepIsReady ?? false
+    }
+    
+    func stepTitleAtIndex(_ index: Int) -> String {
+        (stepsList[currentIndex].viewController as? StepViewController)?.stepTitle ?? ""
+    }
+    
+    func showIncompleteError(_ index: Int) {
+        let viewController = stepsList[index].viewController as? StepViewController
+        viewController?.showIncompleteError()
+    }
+    
     func didSelected(step: Int) {
         currentIndex = step
         debugPrint("selected step is \(step)")
@@ -29,7 +42,14 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.stepCellId, for: indexPath) as! CCStepScalingCell
         
         cell.backgroundColor = .gray
-        cell.config(step: stepsList[indexPath.row])
+        let row = indexPath.row
+        cell.config(
+            viewModel: .init(
+                stepTitle: stepTitleAtIndex(row),
+                stepIsReady: stepIsReadyAtIndex(row),
+                step: stepsList[row]
+            )
+        )
         cell.didChangedSelection(isSelected: cell.isSelected)
         return cell
     }
@@ -151,7 +171,7 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
     
     func minimalStepWidthAtIndex(index: Int) -> CGFloat {
         let label = UILabel()
-        label.text = stepsList[index].viewController.stepTitle
+        label.text = stepTitleAtIndex(index)
         label.sizeToFit()
         let size = label.frame.size.width
         let iconSize: CGFloat = stepsList[index].image == nil ? 0 : 22
@@ -164,7 +184,8 @@ class StepContentViewController: UIViewController, CCStepsDataSource {
     }
     
     func canJumpTo(step: Int) -> Bool {
-        stepsList[currentIndex].viewController.stepIsReady
+        let controller = (stepsList[currentIndex].viewController as? StepViewController)
+        return controller?.stepIsReady ?? false
     }
     
     func stepAtIndex(index: Int) -> CCStep {

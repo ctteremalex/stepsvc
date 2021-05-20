@@ -11,6 +11,14 @@ public protocol CCStepsDataSource: CCStepsBarDataSource {
     /// `CCStep` for index
     func stepAtIndex(index: Int) -> CCStep
     
+    /// Step content is ready to jump out
+    func stepIsReadyAtIndex(_ index: Int) -> Bool
+    
+    /// Step title to show as tile name
+    func stepTitleAtIndex(_ index: Int) -> String
+    
+    /// Call it to show an incompleteness error
+    func showIncompleteError(_ index: Int)
 }
 
 public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
@@ -44,7 +52,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     }
     
     public func showIncompletionError(step: Int) {
-        dataSource?.stepAtIndex(index: step).viewController.showIncompleteError()
+        dataSource?.showIncompleteError(step)
     }
     
     private let StepsbarHeight: CGFloat = 44
@@ -129,10 +137,7 @@ public class CCStepsViewController: UIViewController, CCStepsBarDelegate {
     }
     
     private func showStepViewController(step: CCStep) {
-        guard let controller = step.viewController.asController else {
-            debugPrint("No controller in step.viewController")
-            return
-        }
+        let controller = step.viewController
         
         addChild(controller)
         stepsView.addSubview(controller.view)

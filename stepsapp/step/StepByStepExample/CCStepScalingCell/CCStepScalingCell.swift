@@ -19,7 +19,13 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
         static let beginScale: CGFloat = 1
     }
     
-    private var step: CCStep?
+    struct ViewModel {
+        let stepTitle: String
+        let stepIsReady: Bool
+        let step: CCStep
+    }
+    
+    private var viewModel: ViewModel?
     
     private lazy var arrowLayer: CAShapeLayer = {
         let arrow = CAShapeLayer()
@@ -35,23 +41,23 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
     @IBOutlet private var background: UIView!
     
     /// config the cell with CCStep
-    func config(step: CCStep) {
-        self.step = step
+    func config(viewModel: ViewModel) {
+        self.viewModel = viewModel
         
         background.backgroundColor = .clear
         selectedBackgroundView = background
         backgroundColor = .clear
         
-        titleButton.setTitle(step.viewController.stepTitle, for: .normal)
+        titleButton.setTitle(viewModel.stepTitle, for: .normal)
         titleButton.tintColor = .black
         titleButton.imageView?.backgroundColor = .clear
         titleButton.setTitleColor(.white, for: .normal)
         titleButton.contentHorizontalAlignment = .center
         
         if isSelected {
-            addArrow(posititon: step.position)
+            addArrow(posititon: viewModel.step.position)
         } else {
-            unselectedArrow(posititon: step.position, isReady: step.viewController.stepIsReady)
+            unselectedArrow(posititon: viewModel.step.position, isReady: viewModel.stepIsReady)
         }
         
         handleIcon()
@@ -68,11 +74,9 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
     }
     
     private func handleSelection(isSelected: Bool) {
-        guard let step = step else {
+        guard let isReady = viewModel?.stepIsReady else {
             return
         }
-        
-        let isReady = step.viewController.stepIsReady
         
         let beginScale: CGFloat
         let endScale: CGFloat
@@ -117,19 +121,19 @@ class CCStepScalingCell: UICollectionViewCell, SelectableStepCell, CAAnimationDe
     }
     
     private func handleIcon() {
-        if step?.viewController.stepIsReady == true {
+        if viewModel?.stepIsReady == true {
             if #available(iOS 13.0, *) {
                 titleButton.setImage(.strokedCheckmark, for: .normal)
             } else {
                 // Fallback on earlier versions
             }
         } else {
-            titleButton.setImage(step?.image, for: .normal)
+            titleButton.setImage(viewModel?.step.image, for: .normal)
         }
     }
     
     private var cellWidth: CGFloat {
-        (isSelected ? step?.stepLabelWidth.value : step?.stepLabelWidth.minimum) ?? bounds.width
+        (isSelected ? viewModel?.step.stepLabelWidth.value : viewModel?.step.stepLabelWidth.minimum) ?? bounds.width
     }
     
     private func addArrow(posititon: CCStep.Position) {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StepViewController: UIViewController, StepContentView {
+final class StepViewController: UIViewController {
     var stepTitle: String? {
         title
     }

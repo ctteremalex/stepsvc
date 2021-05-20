@@ -33,14 +33,14 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
     @IBOutlet private var background: UIView!
     
     /// config the cell with CCStep
-    func config(step: CCStep) {
+    func config(stepTitle: String, step: CCStep) {
         self.step = step
         
         background.backgroundColor = .clear
         selectedBackgroundView = background
         backgroundColor = .clear
         
-        titleButton.setTitle(step.viewController.stepTitle, for: .normal)
+        titleButton.setTitle(stepTitle, for: .normal)
         titleButton.tintColor = .black
         titleButton.imageView?.backgroundColor = .clear
         titleButton.setTitleColor(.white, for: .normal)
@@ -49,7 +49,8 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
         if isSelected {
             addArrow(posititon: step.position)
         } else {
-            unselectedArrow(posititon: step.position, isReady: step.viewController.stepIsReady)
+            let canJump = step.canJumpToStep(0)
+            unselectedArrow(posititon: step.position, isReady: canJump)
         }
         
         handleIcon()
@@ -70,7 +71,7 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
             return
         }
         
-        let isReady = step.viewController.stepIsReady
+        let isReady = step.stepIsReady
         
         let endPath: UIBezierPath
         let height = bounds.height - 2 * Constants.heightInset
@@ -100,7 +101,7 @@ class CCStepCell: UICollectionViewCell, SelectableStepCell {
     }
     
     private func handleIcon() {
-        if step?.viewController.stepIsReady == true {
+        if step?.stepIsReady == true {
             if #available(iOS 13.0, *) {
                 titleButton.setImage(.strokedCheckmark, for: .normal)
             } else {
@@ -221,5 +222,11 @@ private extension UIBezierPath {
         path.closeSubpath()
 
         return self.init(cgPath: path)
+    }
+}
+
+private extension CCStep {
+    var stepIsReady: Bool {
+        canJumpToStep(0)
     }
 }
